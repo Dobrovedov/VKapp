@@ -5,6 +5,7 @@ import ErrorPage from '../pages/ErrorPage';
 import NextButton from '../components/NextButton';
 import SubmitButton from '../components/SubmitButton';
 import BackButton from '../components/BackButton';
+import Question from '../components/questions/Question';
 
 const mockPoolList = [
   {
@@ -63,6 +64,7 @@ const PoolPage = ({ location }) => {
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0];
 
   const [activePanel, setActivePanel] = useState(0);
+  const [userAnswers, setUserAnswers] = useState({});
 
   if (!poolData) {
     return <ErrorPage />;
@@ -77,7 +79,15 @@ const PoolPage = ({ location }) => {
           <Panel id={index}>
             <PanelHeader>{poolData.title}</PanelHeader>
 
-            <Div>{question.title}</Div>
+            <Question
+              question={question}
+              onChange={(value) => {
+                setUserAnswers({
+                  ...userAnswers,
+                  [question.id]: value
+                });
+              }}
+            />
 
             {activePanel > 0 && (
               <BackButton onClick={() => setActivePanel(activePanel - 1)} />
@@ -88,11 +98,13 @@ const PoolPage = ({ location }) => {
               <SubmitButton
                 onClick={() => {
                   setActivePanel('confirmation');
+                  console.log(userAnswers);
                 }}
               />
             )}
           </Panel>
         )),
+        // Extract into separate component
         <Panel id="confirmation">
           <Div
             style={{
