@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Panel, Button, PanelHeader, Div } from '@vkontakte/vkui';
+import { View, Panel, PanelHeader, Div } from '@vkontakte/vkui';
 
 const ErrorPage = () => {
   return (

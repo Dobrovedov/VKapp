@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button } from '@vkontakte/vkui';
 
 const SubmitButton = ({ onClick }) => {
-  return <Button onClick={onClick}>Сохранить</Button>;
+  return <Button onClick={onClick}>Завершить</Button>;
 };
 
 SubmitButton.propTypes = {

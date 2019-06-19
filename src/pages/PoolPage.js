@@ -72,22 +72,42 @@ const PoolPage = ({ location }) => {
 
   return (
     <View activePanel={activePanel}>
-      {poolData.questions.map((question, index) => (
-        <Panel id={index}>
-          <PanelHeader>{poolData.title}</PanelHeader>
+      {[
+        ...poolData.questions.map((question, index) => (
+          <Panel id={index}>
+            <PanelHeader>{poolData.title}</PanelHeader>
 
-          <Div>{question.title}</Div>
+            <Div>{question.title}</Div>
 
-          {activePanel > 0 && (
-            <BackButton onClick={() => setActivePanel(activePanel - 1)} />
-          )}
-          {activePanel < totalQuestionsNumber ? (
-            <NextButton onClick={() => setActivePanel(activePanel + 1)} />
-          ) : (
-            <SubmitButton />
-          )}
+            {activePanel > 0 && (
+              <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+            )}
+            {activePanel < totalQuestionsNumber ? (
+              <NextButton onClick={() => setActivePanel(activePanel + 1)} />
+            ) : (
+              <SubmitButton
+                onClick={() => {
+                  setActivePanel('confirmation');
+                }}
+              />
+            )}
+          </Panel>
+        )),
+        <Panel id="confirmation">
+          <Div
+            style={{
+              paddingTop: 30,
+              paddingBottom: 60,
+              color: 'gray',
+              textAlign: 'center'
+            }}
+          >
+            <h2>Опрос завершен</h2>
+            <br />
+            <p>{poolData.confirmationMessage}</p>
+          </Div>
         </Panel>
-      ))}
+      ]}
     </View>
   );
 };
