@@ -64,11 +64,11 @@ const PoolPage = ({ location }) => {
 
   const [activePanel, setActivePanel] = useState(0);
 
-  const totalQuestionsNumber = poolData.questions.length - 1;
-
   if (!poolData) {
     return <ErrorPage />;
   }
+
+  const totalQuestionsNumber = poolData.questions.length - 1;
 
   return (
     <View activePanel={activePanel}>
