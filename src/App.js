@@ -5,12 +5,6 @@ import AllProviders from "./AllProviders"
 
 import PoolPage from "./pages/PoolPage"
 
-const App = () => (
-  <AllProviders>
-    <Switch>
-      <Route component={PoolPage} />
-    </Switch>
-  </AllProviders>
-)
+const App = () => <div>Пример Preview Deploy</div>
 
 export default App
