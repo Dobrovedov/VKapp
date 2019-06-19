@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { View, Panel, Button, PanelHeader, Div } from '@vkontakte/vkui';
+import ErrorPage from '../pages/ErrorPage';
 
 const mockPoolList = [
   {
@@ -59,6 +60,10 @@ const PoolPage = ({ location }) => {
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0];
 
   const [activePanel, setActivePanel] = useState(0);
+
+  if (!poolData) {
+    return <ErrorPage />;
+  }
 
   return (
     <View activePanel={activePanel}>
