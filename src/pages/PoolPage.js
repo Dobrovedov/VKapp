@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-import { View, Panel, Button } from '@vkontakte/vkui';
+import { View, Panel, Button, PanelHeader, Div } from '@vkontakte/vkui';
 
 const mockPoolList = [
   {
     id: '12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ',
 
-    title: 'Fun information',
-    description: '',
+    title: 'Заголовок опроса',
+    description: 'Описание опроса',
     companyId: '',
     editorEmails: ['stevenschmatz@gmail.com'],
     confirmationMessage: 'Thanks for submitting your contact info!',
@@ -64,7 +64,10 @@ const PoolPage = ({ location }) => {
     <View activePanel={activePanel}>
       {poolData.questions.map((question, index) => (
         <Panel id={index}>
-          Question {index}
+          <PanelHeader>{poolData.title}</PanelHeader>
+
+          <Div>{question.title}</Div>
+
           <Button onClick={() => setActivePanel(activePanel + 1)}>Далее</Button>
         </Panel>
       ))}
