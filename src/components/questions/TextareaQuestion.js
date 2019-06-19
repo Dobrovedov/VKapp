@@ -1,15 +1,7 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 
-import {
-  Group,
-  List,
-  Cell,
-  Checkbox,
-  FormLayout,
-  Button,
-  Input,
-} from "@vkontakte/vkui"
+import { Cell, Input } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
 const TextareaQuestion = ({
@@ -20,7 +12,7 @@ const TextareaQuestion = ({
   onChange,
 }) => {
   return (
-    <FormLayout>
+    <>
       <Cell>{title}</Cell>
       <Cell>{description}</Cell>
       <Input
@@ -31,7 +23,7 @@ const TextareaQuestion = ({
           onChange({ text: event.target.value })
         }}
       />
-    </FormLayout>
+    </>
   )
 }
 

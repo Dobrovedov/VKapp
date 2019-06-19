@@ -1,36 +1,42 @@
 import React from "react"
 import PropTypes from "prop-types"
 
+import { FormLayout } from "@vkontakte/vkui"
+
 import RadioQuestion from "./RadioQuestion"
-import CheckboxQuestion from "./TextareaQuestion"
+import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
 
 const Question = ({ question, onChange }) => {
   if (question.type === "TEXTAREA") {
     return (
-      <TextareaQuestion
-        id={question.id}
-        title={question.title}
-        description={question.helpText}
-        placeholder={question.placeholder}
-        mandatory={question.isRequired}
-        onChange={onChange}
-      />
+      <FormLayout>
+        <TextareaQuestion
+          id={question.id}
+          title={question.title}
+          description={question.helpText}
+          placeholder={question.placeholder}
+          mandatory={question.isRequired}
+          onChange={onChange}
+        />
+      </FormLayout>
     )
   }
 
   if (question.type === "MULTIPLE_CHOICE") {
     return (
-      <RadioQuestion
-        id={question.id}
-        title={question.title}
-        description={question.helpText}
-        placeholder={question.placeholder}
-        mandatory={question.isRequired}
-        options={question.options}
-        hasAnotherOption={question.hasOtherOption}
-        onChange={onChange}
-      />
+      <FormLayout>
+        <RadioQuestion
+          id={question.id}
+          title={question.title}
+          description={question.helpText}
+          placeholder={question.placeholder}
+          mandatory={question.isRequired}
+          options={question.options}
+          hasAnotherOption={question.hasOtherOption}
+          onChange={onChange}
+        />
+      </FormLayout>
     )
   }
 
@@ -39,7 +45,18 @@ const Question = ({ question, onChange }) => {
   }
 
   if (question.type === "DROPDOWN") {
-    return <div />
+    return (
+      <FormLayout>
+        <DropdownQuestion
+          id={question.id}
+          title={question.title}
+          description={question.helpText}
+          mandatory={question.isRequired}
+          options={question.options}
+          onChange={onChange}
+        />
+      </FormLayout>
+    )
   }
 
   return <div>Неверный тип вопроса</div>

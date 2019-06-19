@@ -1,21 +1,12 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Radio, Div } from "@vkontakte/vkui"
+import { Radio, Cell } from "@vkontakte/vkui"
 
-const RadioQuestion = ({
-  id,
-  title,
-  description,
-  placeholder,
-  mandatory,
-  options,
-  onChange,
-  hasAnotherOption,
-}) => {
+const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
   return (
-    <div>
-      <Div>{title}</Div>
+    <>
+      <Cell>{title}</Cell>
       {options.map((option) => (
         <Radio
           name={id}
@@ -34,7 +25,7 @@ const RadioQuestion = ({
           }}
         />
       )}
-    </div>
+    </>
   )
 }
 
