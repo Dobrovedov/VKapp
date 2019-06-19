@@ -2,10 +2,21 @@ import React from "react"
 import PropTypes from "prop-types"
 
 import RadioQuestion from "./RadioQuestion"
+import CheckboxQuestion from "./TextareaQuestion"
+import TextareaQuestion from "./TextareaQuestion"
 
 const Question = ({ question, onChange }) => {
   if (question.type === "TEXTAREA") {
-    return <div />
+    return (
+      <TextareaQuestion
+        id={question.id}
+        title={question.title}
+        description={question.helpText}
+        placeholder={question.placeholder}
+        mandatory={question.isRequired}
+        onChange={onChange}
+      />
+    )
   }
 
   if (question.type === "MULTIPLE_CHOICE") {
@@ -24,7 +35,7 @@ const Question = ({ question, onChange }) => {
   }
 
   if (question.type === "CHECKBOX") {
-    return <div />
+    return <div></div>
   }
 
   if (question.type === "DROPDOWN") {

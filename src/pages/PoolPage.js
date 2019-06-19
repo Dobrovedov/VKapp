@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useReducer } from "react"
 
 import { View, Panel, PanelHeader, Div } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
@@ -20,7 +20,7 @@ const mockPoolList = [
     questions: [
       {
         type: "TEXTAREA",
-        helpText: "",
+        helpText: "Little description",
         placeholder: "",
         title: "Name",
         id: 1633920210,
@@ -38,7 +38,7 @@ const mockPoolList = [
       },
       {
         type: "CHECKBOX",
-        helpText: "",
+        helpText: "Description",
         id: 1846923513,
         title: "How much do you like checkboxes?",
         isRequired: false,
@@ -86,13 +86,10 @@ const PoolPage = ({ location }) => {
             <Question
               question={question}
               onChange={(value) => {
-                setUserAnswers([
+                setUserAnswers({
                   ...userAnswers,
-                  {
-                    questionId: question.id,
-                    ...value,
-                  },
-                ])
+                  [question.id]: value,
+                })
               }}
             />
 
