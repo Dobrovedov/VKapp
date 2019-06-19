@@ -68,7 +68,7 @@ const PoolPage = ({ location }) => {
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
 
   const [activePanel, setActivePanel] = useState(0)
-  const [userAnswers, setUserAnswers] = useState({})
+  const [userAnswers, setUserAnswers] = useState([])
 
   if (!poolData) {
     return <ErrorPage />
@@ -86,10 +86,13 @@ const PoolPage = ({ location }) => {
             <Question
               question={question}
               onChange={(value) => {
-                setUserAnswers({
+                setUserAnswers([
                   ...userAnswers,
-                  [question.id]: value,
-                })
+                  {
+                    questionId: question.id,
+                    ...value,
+                  },
+                ])
               }}
             />
 

@@ -9,7 +9,18 @@ const Question = ({ question, onChange }) => {
   }
 
   if (question.type === "MULTIPLE_CHOICE") {
-    return <RadioQuestion {...question} onChange={onChange} />
+    return (
+      <RadioQuestion
+        id={question.id}
+        title={question.title}
+        description={question.helpText}
+        placeholder={question.placeholder}
+        mandatory={question.isRequired}
+        options={question.options}
+        hasAnotherOption={question.hasOtherOption}
+        onChange={onChange}
+      />
+    )
   }
 
   if (question.type === "CHECKBOX") {

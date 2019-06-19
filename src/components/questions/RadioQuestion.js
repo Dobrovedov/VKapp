@@ -11,6 +11,7 @@ const RadioQuestion = ({
   mandatory,
   options,
   onChange,
+  hasAnotherOption,
 }) => {
   return (
     <div>
@@ -20,12 +21,26 @@ const RadioQuestion = ({
           name={id}
           description={option}
           onChange={(event) => {
-            onChange(option)
+            onChange({ selectedAnotherOption: false, selectedAnswer: option })
           }}
         />
       ))}
+      {hasAnotherOption && (
+        <Radio
+          name={id}
+          description={"Иное"}
+          onChange={(event) => {
+            onChange({ selectedAnotherOption: true, selectedAnswer: "Another" })
+          }}
+        />
+      )}
     </div>
   )
+}
+
+RadioQuestion.defaultProps = {
+  mandatory: false,
+  hasAnotherOption: false,
 }
 
 RadioQuestion.propTypes = {
@@ -33,9 +48,10 @@ RadioQuestion.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
-  mandatory: PropTypes.bool.isRequired,
   options: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
+  mandatory: PropTypes.bool.isRequired,
+  hasAnotherOption: PropTypes.bool,
 }
 
 export default RadioQuestion
