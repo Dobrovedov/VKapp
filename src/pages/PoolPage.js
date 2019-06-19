@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
-import { View, Panel, Button, PanelHeader, Div } from '@vkontakte/vkui';
+import { View, Panel, PanelHeader, Div } from '@vkontakte/vkui';
 import ErrorPage from '../pages/ErrorPage';
+import NextButton from '../components/NextButton';
+import SubmitButton from '../components/SubmitButton';
+import BackButton from '../components/BackButton';
 
 const mockPoolList = [
   {
@@ -61,6 +64,8 @@ const PoolPage = ({ location }) => {
 
   const [activePanel, setActivePanel] = useState(0);
 
+  const totalQuestionsNumber = poolData.questions.length - 1;
+
   if (!poolData) {
     return <ErrorPage />;
   }
@@ -73,7 +78,14 @@ const PoolPage = ({ location }) => {
 
           <Div>{question.title}</Div>
 
-          <Button onClick={() => setActivePanel(activePanel + 1)}>Далее</Button>
+          {activePanel > 0 && (
+            <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+          )}
+          {activePanel < totalQuestionsNumber ? (
+            <NextButton onClick={() => setActivePanel(activePanel + 1)} />
+          ) : (
+            <SubmitButton />
+          )}
         </Panel>
       ))}
     </View>
