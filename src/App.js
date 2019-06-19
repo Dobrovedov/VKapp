@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react"
 
-import { Switch, Route } from 'react-router-dom';
-import AllProviders from './AllProviders';
+import { Switch, Route } from "react-router-dom"
+import AllProviders from "./AllProviders"
 
-import PoolPage from './pages/PoolPage';
+import PoolPage from "./pages/PoolPage"
 
 const App = () => (
   <AllProviders>
@@ -11,6 +11,6 @@ const App = () => (
       <Route component={PoolPage} />
     </Switch>
   </AllProviders>
-);
+)
 
-export default App;
+export default App

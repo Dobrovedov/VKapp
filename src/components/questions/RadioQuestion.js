@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react"
+import PropTypes from "prop-types"
 
-import { Radio, Div } from '@vkontakte/vkui';
+import { Radio, Div } from "@vkontakte/vkui"
 
 const RadioQuestion = ({
   id,
@@ -10,7 +10,7 @@ const RadioQuestion = ({
   placeholder,
   mandatory,
   options,
-  onChange
+  onChange,
 }) => {
   return (
     <div>
@@ -20,13 +20,13 @@ const RadioQuestion = ({
           name={id}
           description={option}
           onChange={(event) => {
-            onChange(option);
+            onChange(option)
           }}
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
 RadioQuestion.propTypes = {
   id: PropTypes.number.isRequired,
@@ -35,7 +35,7 @@ RadioQuestion.propTypes = {
   placeholder: PropTypes.string.isRequired,
   mandatory: PropTypes.bool.isRequired,
   options: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func
-};
+  onChange: PropTypes.func,
+}
 
-export default RadioQuestion;
+export default RadioQuestion

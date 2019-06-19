@@ -1,76 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState } from "react"
 
-import { View, Panel, PanelHeader, Div } from '@vkontakte/vkui';
-import ErrorPage from '../pages/ErrorPage';
-import NextButton from '../components/NextButton';
-import SubmitButton from '../components/SubmitButton';
-import BackButton from '../components/BackButton';
-import Question from '../components/questions/Question';
+import { View, Panel, PanelHeader, Div } from "@vkontakte/vkui"
+import ErrorPage from "../pages/ErrorPage"
+import NextButton from "../components/NextButton"
+import SubmitButton from "../components/SubmitButton"
+import BackButton from "../components/BackButton"
+import Question from "../components/questions/Question"
 
 const mockPoolList = [
   {
-    id: '12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ',
+    id: "12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ",
 
-    title: 'Заголовок опроса',
-    description: 'Описание опроса',
-    companyId: '',
-    editorEmails: ['stevenschmatz@gmail.com'],
-    confirmationMessage: 'Thanks for submitting your contact info!',
+    title: "Заголовок опроса",
+    description: "Описание опроса",
+    companyId: "",
+    editorEmails: ["stevenschmatz@gmail.com"],
+    confirmationMessage: "Thanks for submitting your contact info!",
 
     questions: [
       {
-        type: 'TEXTAREA',
-        helpText: '',
-        placeholder: '',
-        title: 'Name',
+        type: "TEXTAREA",
+        helpText: "",
+        placeholder: "",
+        title: "Name",
         id: 1633920210,
-        isRequired: false
+        isRequired: false,
       },
       {
-        type: 'MULTIPLE_CHOICE',
-        helpText: '',
+        type: "MULTIPLE_CHOICE",
+        helpText: "",
         id: 1770822543,
-        title: 'How much do you like choices?',
+        title: "How much do you like choices?",
         isRequired: false,
         hasOtherOption: true,
-        placeholder: '',
-        options: ['Option 1', 'Option 2']
+        placeholder: "",
+        options: ["Option 1", "Option 2"],
       },
       {
-        type: 'CHECKBOX',
-        helpText: '',
+        type: "CHECKBOX",
+        helpText: "",
         id: 1846923513,
-        title: 'How much do you like checkboxes?',
+        title: "How much do you like checkboxes?",
         isRequired: false,
         hasOtherOption: true,
-        placeholder: '',
-        options: ['Option 1 Check', 'Option 2 Check']
+        placeholder: "",
+        options: ["Option 1 Check", "Option 2 Check"],
       },
       {
-        type: 'DROPDOWN',
-        helpText: '',
+        type: "DROPDOWN",
+        helpText: "",
         id: 449887830,
-        title: 'How much do you like dropdowns?',
+        title: "How much do you like dropdowns?",
         isRequired: false,
-        placeholder: '',
-        options: ['Option 1 Dropdown', 'Option 2 Dropdown', 'Option 3 Dropdown']
-      }
-    ]
-  }
-];
+        placeholder: "",
+        options: [
+          "Option 1 Dropdown",
+          "Option 2 Dropdown",
+          "Option 3 Dropdown",
+        ],
+      },
+    ],
+  },
+]
 
 const PoolPage = ({ location }) => {
-  const poolId = location.pathname.slice(1);
-  const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0];
+  const poolId = location.pathname.slice(1)
+  const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
 
-  const [activePanel, setActivePanel] = useState(0);
-  const [userAnswers, setUserAnswers] = useState({});
+  const [activePanel, setActivePanel] = useState(0)
+  const [userAnswers, setUserAnswers] = useState({})
 
   if (!poolData) {
-    return <ErrorPage />;
+    return <ErrorPage />
   }
 
-  const totalQuestionsNumber = poolData.questions.length - 1;
+  const totalQuestionsNumber = poolData.questions.length - 1
 
   return (
     <View activePanel={activePanel}>
@@ -84,8 +88,8 @@ const PoolPage = ({ location }) => {
               onChange={(value) => {
                 setUserAnswers({
                   ...userAnswers,
-                  [question.id]: value
-                });
+                  [question.id]: value,
+                })
               }}
             />
 
@@ -97,8 +101,8 @@ const PoolPage = ({ location }) => {
             ) : (
               <SubmitButton
                 onClick={() => {
-                  setActivePanel('confirmation');
-                  console.log(userAnswers);
+                  setActivePanel("confirmation")
+                  console.log(userAnswers)
                 }}
               />
             )}
@@ -110,18 +114,18 @@ const PoolPage = ({ location }) => {
             style={{
               paddingTop: 30,
               paddingBottom: 60,
-              color: 'gray',
-              textAlign: 'center'
+              color: "gray",
+              textAlign: "center",
             }}
           >
             <h2>Опрос завершен</h2>
             <br />
             <p>{poolData.confirmationMessage}</p>
           </Div>
-        </Panel>
+        </Panel>,
       ]}
     </View>
-  );
-};
+  )
+}
 
-export default PoolPage;
+export default PoolPage
