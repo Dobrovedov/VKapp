@@ -1,9 +1,8 @@
 {
-  "name": "VKapp",
+  "name": "",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://dshtefan.github.io/VKapp/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build"
