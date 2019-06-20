@@ -82,7 +82,25 @@ const PoolPage = ({ location }) => {
     poolData.questions.map(() => "valid"),
   )
 
-  //console.log(userAnswers);
+  const handleError = (question) => {
+    const status = questionsStatus
+    const answer = userAnswers[question.id]
+
+    if (
+      answer !== undefined &&
+      answer.text !== "" &&
+      answer.selectedAnswers &&
+      answer.selectedAnswers.length !== 0
+    ) {
+      status[activePanel] = "valid"
+    } else {
+      status[activePanel] = "error"
+    }
+
+    setQuestionsStatus(status)
+  }
+
+  console.log(userAnswers)
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -129,22 +147,7 @@ const PoolPage = ({ location }) => {
                 {activePanel > 0 && (
                   <BackButton
                     onClick={() => {
-                      const status = questionsStatus
-                      const answer = userAnswers[question.id]
-
-                      if (
-                        answer !== undefined &&
-                        answer.text !== "" &&
-                        answer.selectedAnswers &&
-                        answer.selectedAnswers.length !== 0
-                      ) {
-                        status[activePanel] = "valid"
-                      } else {
-                        status[activePanel] = "error"
-                      }
-
-                      setQuestionsStatus(status)
-
+                      handleError(question)
                       setActivePanel(activePanel - 1)
                     }}
                   />
@@ -152,21 +155,7 @@ const PoolPage = ({ location }) => {
                 {activePanel < totalQuestionsNumber ? (
                   <NextButton
                     onClick={() => {
-                      const status = questionsStatus
-                      const answer = userAnswers[question.id]
-                      if (
-                        answer !== undefined &&
-                        answer.text !== "" &&
-                        answer.selectedAnswers &&
-                        answer.selectedAnswers.length !== 0
-                      ) {
-                        status[activePanel] = "valid"
-                      } else {
-                        status[activePanel] = "error"
-                      }
-
-                      setQuestionsStatus(status)
-
+                      handleError(question)
                       setActivePanel(activePanel + 1)
                     }}
                   />
