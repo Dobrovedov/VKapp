@@ -45,6 +45,7 @@ const CheckboxQuestion = ({
       {hasAnotherOption && (
         <Checkbox
           value={"Другое"}
+          defaultChecked={chosenAnswers.indexOf("Другое") !== -1}
           onChange={(event) => {
             if (!isAnotherOptionChecked) {
               setChosenAnswers([...chosenAnswers, "Другое"])

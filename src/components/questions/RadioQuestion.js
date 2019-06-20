@@ -28,6 +28,7 @@ const RadioQuestion = ({
         <Radio
           name={id}
           description={"Другое"}
+          checked={value.selectedAnswer === "Другое"}
           onChange={(event) => {
             onChange({ selectedAnotherOption: true, selectedAnswer: "Другое" })
           }}
