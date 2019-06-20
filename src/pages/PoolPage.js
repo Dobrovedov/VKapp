@@ -6,6 +6,7 @@ import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
 import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
+import ThanksPanel from "../components/ThanksPanel"
 
 const mockPoolList = [
   {
@@ -109,18 +110,7 @@ const PoolPage = ({ location }) => {
           )),
           // Extract into separate component
           <Panel id="confirmation">
-            <Div
-              style={{
-                paddingTop: 30,
-                paddingBottom: 60,
-                color: "gray",
-                textAlign: "center",
-              }}
-            >
-              <h2>Опрос завершен</h2>
-              <br />
-              <p>{poolData.confirmationMessage}</p>
-            </Div>
+            <ThanksPanel confirmationMessage={poolData.confirmationMessage} />
           </Panel>,
         ]}
       </View>
