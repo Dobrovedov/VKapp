@@ -5,7 +5,6 @@ import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
 import BackButton from "../components/BackButton"
-import ProgressBar from "../components/ProgressBar"
 import Question from "../components/questions/Question"
 
 const mockPoolList = [
@@ -83,8 +82,6 @@ const PoolPage = ({ location }) => {
         ...poolData.questions.map((question, index) => (
           <Panel id={index}>
             <PanelHeader>{poolData.title}</PanelHeader>
-
-            <ProgressBar value={(activePanel / totalQuestionsNumber) * 100} />
 
             <Question
               question={question}
