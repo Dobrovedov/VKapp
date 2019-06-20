@@ -79,6 +79,9 @@ const PoolPage = ({ location }) => {
           ...poolData.questions.map((question, index) => (
             <Panel id={index}>
               <PanelHeader>{poolData.title}</PanelHeader>
+              <div>
+                <Progress value={(activePanel / totalQuestionsNumber) * 100} />
+              </div>
               <Question
                 question={question}
                 value={userAnswers[question.id]}
@@ -121,17 +124,6 @@ const PoolPage = ({ location }) => {
           </Panel>,
         ]}
       </View>
-      <div
-        style={{
-          width: "100vw",
-          height: 5,
-          position: "absolute",
-          bottom: 0,
-          zIndex: 200,
-        }}
-      >
-        <Progress value={(activePanel / totalQuestionsNumber) * 100} />
-      </div>
     </div>
   )
 }
