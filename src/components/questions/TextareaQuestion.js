@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 
 import { Cell, Input } from "@vkontakte/vkui"
@@ -10,6 +10,7 @@ const TextareaQuestion = ({
   placeholder,
   description,
   onChange,
+  value,
 }) => {
   return (
     <>
@@ -22,9 +23,16 @@ const TextareaQuestion = ({
         onChange={(event) => {
           onChange({ text: event.target.value })
         }}
+        value={value.text}
       />
     </>
   )
+}
+
+TextareaQuestion.defaultProps = {
+  value: {
+    text: "",
+  },
 }
 
 TextareaQuestion.propTypes = {
@@ -32,6 +40,7 @@ TextareaQuestion.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  value: PropTypes.object,
   placeholder: PropTypes.string,
   mandatory: PropTypes.bool,
 }

@@ -8,7 +8,7 @@ import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
-const Question = ({ question, onChange, status }) => {
+const Question = ({ question, value, onChange, status }) => {
   if (question.type === "TEXTAREA") {
     return (
       <FormLayout>
@@ -18,6 +18,7 @@ const Question = ({ question, onChange, status }) => {
           description={question.helpText}
           placeholder={question.placeholder}
           mandatory={question.isRequired}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
@@ -35,6 +36,7 @@ const Question = ({ question, onChange, status }) => {
           mandatory={question.isRequired}
           options={question.options}
           hasAnotherOption={question.hasOtherOption}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
@@ -51,6 +53,7 @@ const Question = ({ question, onChange, status }) => {
           options={question.options}
           mandatory={question.isRequired}
           hasAnotherOption={question.hasOtherOption}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
@@ -66,6 +69,7 @@ const Question = ({ question, onChange, status }) => {
           description={question.helpText}
           mandatory={question.isRequired}
           options={question.options}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>

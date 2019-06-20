@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react"
+import React, { useState } from "react"
 
 import {
   View,
@@ -7,12 +7,14 @@ import {
   Div,
   FormLayout,
   FormStatus,
+  Progress,
 } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
 import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
+import ThanksPanel from "../components/ThanksPanel"
 
 const mockPoolList = [
   {
@@ -41,7 +43,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1", "Option 2"],
+        options: ["I choose you!", "No, you!", "Never mind, you!"],
       },
       {
         type: "CHECKBOX",
@@ -51,7 +53,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1 Check", "Option 2 Check"],
+        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
       },
       {
         type: "DROPDOWN",
@@ -60,11 +62,7 @@ const mockPoolList = [
         title: "How much do you like dropdowns?",
         isRequired: false,
         placeholder: "",
-        options: [
-          "Option 1 Dropdown",
-          "Option 2 Dropdown",
-          "Option 3 Dropdown",
-        ],
+        options: ["I love it <3", "So-so", "Nah, dispose of them"],
       },
     ],
   },
@@ -89,114 +87,110 @@ const PoolPage = ({ location }) => {
   const totalQuestionsNumber = poolData.questions.length - 1
 
   return (
-    <View activePanel={activePanel}>
-      {[
-        ...poolData.questions.map((question, index) => (
-          <Panel id={index}>
-            <PanelHeader>{poolData.title}</PanelHeader>
-            {questionsStatus[index] === "error" ? (
-              <FormLayout>
-                <FormStatus
-                  title="Неккоректые данные"
-                  state={questionsStatus[index]}
-                >
-                  {(() => {
-                    switch (question.type) {
-                      case "TEXTAREA":
-                      case "DROPDOWN":
-                        return "Поле не должно оставаться пустым"
-                      case "CHECKBOX":
-                      case "MULTIPLE_CHOICE":
-                        return "Не выбран ни один вариант"
-                    }
-                  })()}
-                </FormStatus>
-              </FormLayout>
-            ) : null}
-            <Question
-              question={question}
-              onChange={(value) => {
-                setUserAnswers({
-                  ...userAnswers,
-                  [question.id]: value,
-                })
-              }}
-            />
-
-            {activePanel > 0 && (
-              <BackButton
-                onClick={() => {
-                  const status = questionsStatus
-                  const answer = userAnswers[question.id]
-
-                  if (
-                    answer !== undefined &&
-                    answer.text !== "" &&
-                    answer.selectedAnswers &&
-                    answer.selectedAnswers.length !== 0
-                  ) {
-                    status[activePanel] = "valid"
-                  } else {
-                    status[activePanel] = "error"
-                  }
-
-                  setQuestionsStatus(status)
-
-                  setActivePanel(activePanel - 1)
+    <div>
+      <View activePanel={activePanel}>
+        {[
+          ...poolData.questions.map((question, index) => (
+            <Panel id={index}>
+              <PanelHeader>{poolData.title}</PanelHeader>
+              <div>
+                <Progress value={(activePanel / totalQuestionsNumber) * 100} />
+              </div>
+              {questionsStatus[index] === "error" ? (
+                <FormLayout>
+                  <FormStatus
+                    title="Неккоректые данные"
+                    state={questionsStatus[index]}
+                  >
+                    {(() => {
+                      switch (question.type) {
+                        case "TEXTAREA":
+                        case "DROPDOWN":
+                          return "Поле не должно оставаться пустым"
+                        case "CHECKBOX":
+                        case "MULTIPLE_CHOICE":
+                          return "Не выбран ни один вариант"
+                      }
+                    })()}
+                  </FormStatus>
+                </FormLayout>
+              ) : null}
+              <Question
+                question={question}
+                value={userAnswers[question.id]}
+                onChange={(value) => {
+                  setUserAnswers({
+                    ...userAnswers,
+                    [question.id]: value,
+                  })
                 }}
               />
-            )}
-            {activePanel < totalQuestionsNumber ? (
-              <NextButton
-                onClick={() => {
-                  const status = questionsStatus
-                  const answer = userAnswers[question.id]
-                  if (
-                    answer !== undefined &&
-                    answer.text !== "" &&
-                    answer.selectedAnswers &&
-                    answer.selectedAnswers.length !== 0
-                  ) {
-                    status[activePanel] = "valid"
-                  } else {
-                    status[activePanel] = "error"
-                  }
+              <Div style={{ display: "flex" }}>
+                {activePanel > 0 && (
+                  <BackButton
+                    onClick={() => {
+                      const status = questionsStatus
+                      const answer = userAnswers[question.id]
 
-                  setQuestionsStatus(status)
+                      if (
+                        answer !== undefined &&
+                        answer.text !== "" &&
+                        answer.selectedAnswers &&
+                        answer.selectedAnswers.length !== 0
+                      ) {
+                        status[activePanel] = "valid"
+                      } else {
+                        status[activePanel] = "error"
+                      }
 
-                  setActivePanel(activePanel + 1)
-                }}
-              />
-            ) : (
-              <SubmitButton
-                onClick={() => {
-                  if (questionsStatus.some((item) => item === "error")) {
-                    return
-                  }
-                  setActivePanel("confirmation")
-                  console.log(userAnswers)
-                }}
-              />
-            )}
-          </Panel>
-        )),
-        // Extract into separate component
-        <Panel id="confirmation">
-          <Div
-            style={{
-              paddingTop: 30,
-              paddingBottom: 60,
-              color: "gray",
-              textAlign: "center",
-            }}
-          >
-            <h2>Опрос завершен</h2>
-            <br />
-            <p>{poolData.confirmationMessage}</p>
-          </Div>
-        </Panel>,
-      ]}
-    </View>
+                      setQuestionsStatus(status)
+
+                      setActivePanel(activePanel - 1)
+                    }}
+                  />
+                )}
+                {activePanel < totalQuestionsNumber ? (
+                  <NextButton
+                    onClick={() => {
+                      const status = questionsStatus
+                      const answer = userAnswers[question.id]
+                      if (
+                        answer !== undefined &&
+                        answer.text !== "" &&
+                        answer.selectedAnswers &&
+                        answer.selectedAnswers.length !== 0
+                      ) {
+                        status[activePanel] = "valid"
+                      } else {
+                        status[activePanel] = "error"
+                      }
+
+                      setQuestionsStatus(status)
+
+                      setActivePanel(activePanel + 1)
+                    }}
+                  />
+                ) : (
+                  <SubmitButton
+                    onClick={() => {
+                      if (questionsStatus.some((item) => item === "error")) {
+                        return
+                      }
+                      setActivePanel("confirmation")
+                      console.log(userAnswers)
+                    }}
+                  />
+                )}
+              </Div>
+            </Panel>
+          )),
+          // Extract into separate component
+          <Panel id="confirmation">
+            <ThanksPanel confirmationMessage={poolData.confirmationMessage} />
+          </Panel>,
+        ]}
+      </View>
+    </div>
   )
 }
 
