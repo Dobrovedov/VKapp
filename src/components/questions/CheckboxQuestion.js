@@ -8,10 +8,11 @@ const CheckboxQuestion = ({
   title,
   description,
   options,
+  value,
   onChange,
   hasAnotherOption,
 }) => {
-  const [chosenAnswers, setChosenAnswers] = useState([])
+  const [chosenAnswers, setChosenAnswers] = useState(value.selectedAnswers)
   const [isAnotherOptionChecked, setIsAnotherOptionChecked] = useState(false)
 
   useEffect(() => {
@@ -27,9 +28,8 @@ const CheckboxQuestion = ({
       {options.map((option) => (
         <Checkbox
           value={option}
+          defaultChecked={chosenAnswers.indexOf(option) !== -1}
           onChange={(event) => {
-            setChosenAnswers([...chosenAnswers, event.target.value])
-
             if (event.target.checked) {
               setChosenAnswers([...chosenAnswers, event.target.value])
             } else {
@@ -45,9 +45,16 @@ const CheckboxQuestion = ({
       {hasAnotherOption && (
         <Checkbox
           value={"Другое"}
+          defaultChecked={chosenAnswers.indexOf("Другое") !== -1}
           onChange={(event) => {
-            setIsAnotherOptionChecked(true)
-            setChosenAnswers([...chosenAnswers, "Другое"])
+            if (!isAnotherOptionChecked) {
+              setChosenAnswers([...chosenAnswers, "Другое"])
+            } else {
+              setChosenAnswers(
+                chosenAnswers.filter((answer) => answer !== "Другое"),
+              )
+            }
+            setIsAnotherOptionChecked(!isAnotherOptionChecked)
           }}
         >
           Другое
@@ -58,6 +65,10 @@ const CheckboxQuestion = ({
 }
 
 CheckboxQuestion.defaultProps = {
+  value: {
+    selectedAnotherOption: false,
+    selectedAnswers: [],
+  },
   mandatory: false,
   hasAnotherOption: false,
 }
@@ -65,6 +76,7 @@ CheckboxQuestion.defaultProps = {
 CheckboxQuestion.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  value: PropTypes.object,
   description: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasAnotherOption: PropTypes.bool,

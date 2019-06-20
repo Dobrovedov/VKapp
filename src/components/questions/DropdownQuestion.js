@@ -9,8 +9,10 @@ const DropdownQuestion = ({
   description,
   placeholder,
   options,
+  value,
   onChange,
 }) => {
+  console.log(value.selectedAnswer)
   return (
     <>
       <Cell>{title}</Cell>
@@ -23,13 +25,20 @@ const DropdownQuestion = ({
             selectedAnswer: event.target.value,
           })
         }}
+        value={value.selectedAnswer}
       >
-        {options.map((value) => {
-          return <option value={value}>{value}</option>
+        {options.map((text, index) => {
+          return <option value={text}>{text}</option>
         })}
       </Select>
     </>
   )
+}
+
+DropdownQuestion.defaultProps = {
+  value: {
+    selectedAnswer: "",
+  },
 }
 
 DropdownQuestion.propTypes = {

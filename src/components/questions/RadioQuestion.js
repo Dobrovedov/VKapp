@@ -3,7 +3,14 @@ import PropTypes from "prop-types"
 
 import { Radio, Cell } from "@vkontakte/vkui"
 
-const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
+const RadioQuestion = ({
+  id,
+  title,
+  options,
+  value,
+  onChange,
+  hasAnotherOption,
+}) => {
   return (
     <>
       <Cell>{title}</Cell>
@@ -11,6 +18,7 @@ const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
         <Radio
           name={id}
           description={option}
+          checked={value.selectedAnswer === option}
           onChange={(event) => {
             onChange({ selectedAnotherOption: false, selectedAnswer: option })
           }}
@@ -20,6 +28,7 @@ const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
         <Radio
           name={id}
           description={"Другое"}
+          checked={value.selectedAnswer === "Другое"}
           onChange={(event) => {
             onChange({ selectedAnotherOption: true, selectedAnswer: "Другое" })
           }}
@@ -30,6 +39,10 @@ const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
 }
 
 RadioQuestion.defaultProps = {
+  value: {
+    selectedAnotherOption: false,
+    selectedAnswer: "",
+  },
   mandatory: false,
   hasAnotherOption: false,
 }

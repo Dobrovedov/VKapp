@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react"
+import React, { useState } from "react"
 
 import { View, Panel, PanelHeader, Div } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
@@ -34,7 +34,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1", "Option 2"],
+        options: ["I choose you!", "No, you!", "Never mind, you!"],
       },
       {
         type: "CHECKBOX",
@@ -44,7 +44,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1 Check", "Option 2 Check"],
+        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
       },
       {
         type: "DROPDOWN",
@@ -53,11 +53,7 @@ const mockPoolList = [
         title: "How much do you like dropdowns?",
         isRequired: false,
         placeholder: "",
-        options: [
-          "Option 1 Dropdown",
-          "Option 2 Dropdown",
-          "Option 3 Dropdown",
-        ],
+        options: ["I love it <3", "So-so", "Nah, dispose of them"],
       },
     ],
   },
@@ -85,6 +81,7 @@ const PoolPage = ({ location }) => {
 
             <Question
               question={question}
+              value={userAnswers[question.id]}
               onChange={(value) => {
                 setUserAnswers({
                   ...userAnswers,
