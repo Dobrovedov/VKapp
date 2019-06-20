@@ -9,62 +9,36 @@ import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
 const Question = ({ question, onChange }) => {
+  const props = {
+    id: question.id,
+    title: question.title,
+    description: question.helpText,
+    placeholder: question.placeholder,
+    mandatory: question.isRequired,
+    onChange,
+  }
+
   const questionElements = {
-    TEXTAREA: (
-      <FormLayout>
-        <TextareaQuestion
-          id={question.id}
-          title={question.title}
-          description={question.helpText}
-          placeholder={question.placeholder}
-          mandatory={question.isRequired}
-          onChange={onChange}
-        />
-      </FormLayout>
-    ),
+    TEXTAREA: <TextareaQuestion {...props} />,
     MULTIPLE_CHOICE: (
-      <FormLayout>
-        <RadioQuestion
-          id={question.id}
-          title={question.title}
-          description={question.helpText}
-          placeholder={question.placeholder}
-          mandatory={question.isRequired}
-          options={question.options}
-          hasAnotherOption={question.hasOtherOption}
-          onChange={onChange}
-        />
-      </FormLayout>
+      <RadioQuestion
+        {...props}
+        options={question.options}
+        hasAnotherOption={question.hasOtherOption}
+      />
     ),
     CHECKBOX: (
-      <FormLayout>
-        <CheckboxQuestion
-          id={question.id}
-          title={question.title}
-          description={question.helpText}
-          options={question.options}
-          mandatory={question.isRequired}
-          hasAnotherOption={question.hasOtherOption}
-          onChange={onChange}
-        />
-      </FormLayout>
+      <CheckboxQuestion
+        {...props}
+        options={question.options}
+        hasAnotherOption={question.hasOtherOption}
+      />
     ),
-    DROPDOWN: (
-      <FormLayout>
-        <DropdownQuestion
-          id={question.id}
-          title={question.title}
-          description={question.helpText}
-          mandatory={question.isRequired}
-          options={question.options}
-          onChange={onChange}
-        />
-      </FormLayout>
-    ),
+    DROPDOWN: <DropdownQuestion {...props} options={question.options} />,
   }
 
   return questionElements[question.type] ? (
-    questionElements[question.type]
+    <FormLayout>{questionElements[question.type]}</FormLayout>
   ) : (
     <div>Неверный тип вопроса</div>
   )
