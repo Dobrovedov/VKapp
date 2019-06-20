@@ -8,7 +8,7 @@ import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
-const Question = ({ question, onChange }) => {
+const Question = ({ question, onChange, status }) => {
   if (question.type === "TEXTAREA") {
     return (
       <FormLayout>
@@ -77,6 +77,7 @@ const Question = ({ question, onChange }) => {
 
 Question.propTypes = {
   onChange: PropTypes.func,
+  status: PropTypes.oneOf(["valid", "error"]),
   question: PropTypes.shape({
     type: PropTypes.oneOf([
       "TEXTAREA",

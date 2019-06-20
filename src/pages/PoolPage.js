@@ -1,6 +1,13 @@
 import React, { useState, useReducer } from "react"
 
-import { View, Panel, PanelHeader, Div } from "@vkontakte/vkui"
+import {
+  View,
+  Panel,
+  PanelHeader,
+  Div,
+  FormLayout,
+  FormStatus,
+} from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
@@ -67,12 +74,17 @@ const PoolPage = ({ location }) => {
   const poolId = location.pathname.slice(1)
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
 
-  const [activePanel, setActivePanel] = useState(0)
-  const [userAnswers, setUserAnswers] = useState([])
-
   if (!poolData) {
     return <ErrorPage />
   }
+
+  const [activePanel, setActivePanel] = useState(0)
+  const [userAnswers, setUserAnswers] = useState({})
+  const [questionsStatus, setQuestionsStatus] = useState(
+    poolData.questions.map(() => "valid"),
+  )
+
+  //console.log(userAnswers);
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -82,7 +94,25 @@ const PoolPage = ({ location }) => {
         ...poolData.questions.map((question, index) => (
           <Panel id={index}>
             <PanelHeader>{poolData.title}</PanelHeader>
-
+            {questionsStatus[index] === "error" ? (
+              <FormLayout>
+                <FormStatus
+                  title="Неккоректые данные"
+                  state={questionsStatus[index]}
+                >
+                  {(() => {
+                    switch (question.type) {
+                      case "TEXTAREA":
+                      case "DROPDOWN":
+                        return "Поле не должно оставаться пустым"
+                      case "CHECKBOX":
+                      case "MULTIPLE_CHOICE":
+                        return "Не выбран ни один вариант"
+                    }
+                  })()}
+                </FormStatus>
+              </FormLayout>
+            ) : null}
             <Question
               question={question}
               onChange={(value) => {
@@ -94,13 +124,54 @@ const PoolPage = ({ location }) => {
             />
 
             {activePanel > 0 && (
-              <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+              <BackButton
+                onClick={() => {
+                  const status = questionsStatus
+                  const answer = userAnswers[poolData.questions[activePanel].id]
+                  console.log(answer)
+                  if (
+                    answer !== undefined &&
+                    answer.text !== "" &&
+                    answer.selectedAnswers.length !== 0
+                  ) {
+                    status[activePanel] = "valid"
+                  } else {
+                    status[activePanel] = "error"
+                  }
+
+                  setQuestionsStatus(status)
+
+                  setActivePanel(activePanel - 1)
+                }}
+              />
             )}
             {activePanel < totalQuestionsNumber ? (
-              <NextButton onClick={() => setActivePanel(activePanel + 1)} />
+              <NextButton
+                onClick={() => {
+                  const status = questionsStatus
+                  const answer = userAnswers[poolData.questions[activePanel].id]
+                  console.log(answer)
+                  if (
+                    answer !== undefined &&
+                    answer.text !== "" &&
+                    answer.selectedAnswers.length !== 0
+                  ) {
+                    status[activePanel] = "valid"
+                  } else {
+                    status[activePanel] = "error"
+                  }
+
+                  setQuestionsStatus(status)
+
+                  setActivePanel(activePanel + 1)
+                }}
+              />
             ) : (
               <SubmitButton
                 onClick={() => {
+                  if (questionsStatus.some((item) => item === "error")) {
+                    return
+                  }
                   setActivePanel("confirmation")
                   console.log(userAnswers)
                 }}
