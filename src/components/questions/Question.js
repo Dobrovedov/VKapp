@@ -9,8 +9,8 @@ import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
 const Question = ({ question, onChange }) => {
-  if (question.type === "TEXTAREA") {
-    return (
+  const questionElements = {
+    TEXTAREA: (
       <FormLayout>
         <TextareaQuestion
           id={question.id}
@@ -21,11 +21,8 @@ const Question = ({ question, onChange }) => {
           onChange={onChange}
         />
       </FormLayout>
-    )
-  }
-
-  if (question.type === "MULTIPLE_CHOICE") {
-    return (
+    ),
+    MULTIPLE_CHOICE: (
       <FormLayout>
         <RadioQuestion
           id={question.id}
@@ -38,11 +35,8 @@ const Question = ({ question, onChange }) => {
           onChange={onChange}
         />
       </FormLayout>
-    )
-  }
-
-  if (question.type === "CHECKBOX") {
-    return (
+    ),
+    CHECKBOX: (
       <FormLayout>
         <CheckboxQuestion
           id={question.id}
@@ -54,11 +48,8 @@ const Question = ({ question, onChange }) => {
           onChange={onChange}
         />
       </FormLayout>
-    )
-  }
-
-  if (question.type === "DROPDOWN") {
-    return (
+    ),
+    DROPDOWN: (
       <FormLayout>
         <DropdownQuestion
           id={question.id}
@@ -69,10 +60,14 @@ const Question = ({ question, onChange }) => {
           onChange={onChange}
         />
       </FormLayout>
-    )
+    ),
   }
 
-  return <div>Неверный тип вопроса</div>
+  return questionElements[question.type] ? (
+    questionElements[question.type]
+  ) : (
+    <div>Неверный тип вопроса</div>
+  )
 }
 
 Question.propTypes = {
