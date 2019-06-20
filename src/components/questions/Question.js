@@ -8,9 +8,9 @@ import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
-const Question = ({ question, onChange }) => {
-  const questionElements = {
-    TEXTAREA: (
+const Question = ({ question, value, onChange }) => {
+  if (question.type === "TEXTAREA") {
+    return (
       <FormLayout>
         <TextareaQuestion
           id={question.id}
@@ -18,11 +18,15 @@ const Question = ({ question, onChange }) => {
           description={question.helpText}
           placeholder={question.placeholder}
           mandatory={question.isRequired}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
-    ),
-    MULTIPLE_CHOICE: (
+    )
+  }
+
+  if (question.type === "MULTIPLE_CHOICE") {
+    return (
       <FormLayout>
         <RadioQuestion
           id={question.id}
@@ -32,11 +36,15 @@ const Question = ({ question, onChange }) => {
           mandatory={question.isRequired}
           options={question.options}
           hasAnotherOption={question.hasOtherOption}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
-    ),
-    CHECKBOX: (
+    )
+  }
+
+  if (question.type === "CHECKBOX") {
+    return (
       <FormLayout>
         <CheckboxQuestion
           id={question.id}
@@ -45,11 +53,15 @@ const Question = ({ question, onChange }) => {
           options={question.options}
           mandatory={question.isRequired}
           hasAnotherOption={question.hasOtherOption}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
-    ),
-    DROPDOWN: (
+    )
+  }
+
+  if (question.type === "DROPDOWN") {
+    return (
       <FormLayout>
         <DropdownQuestion
           id={question.id}
@@ -57,17 +69,14 @@ const Question = ({ question, onChange }) => {
           description={question.helpText}
           mandatory={question.isRequired}
           options={question.options}
+          value={value}
           onChange={onChange}
         />
       </FormLayout>
-    ),
+    )
   }
 
-  return questionElements[question.type] ? (
-    questionElements[question.type]
-  ) : (
-    <div>Неверный тип вопроса</div>
-  )
+  return <div>Неверный тип вопроса</div>
 }
 
 Question.propTypes = {

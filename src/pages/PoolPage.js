@@ -1,6 +1,6 @@
-import React, { useState, useReducer } from "react"
+import React, { useState } from "react"
 
-import { View, Panel, PanelHeader, Div } from "@vkontakte/vkui"
+import { View, Panel, PanelHeader, Div, Progress } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
@@ -34,7 +34,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1", "Option 2"],
+        options: ["I choose you!", "No, you!", "Never mind, you!"],
       },
       {
         type: "CHECKBOX",
@@ -44,7 +44,7 @@ const mockPoolList = [
         isRequired: false,
         hasOtherOption: true,
         placeholder: "",
-        options: ["Option 1 Check", "Option 2 Check"],
+        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
       },
       {
         type: "DROPDOWN",
@@ -53,11 +53,7 @@ const mockPoolList = [
         title: "How much do you like dropdowns?",
         isRequired: false,
         placeholder: "",
-        options: [
-          "Option 1 Dropdown",
-          "Option 2 Dropdown",
-          "Option 3 Dropdown",
-        ],
+        options: ["I love it <3", "So-so", "Nah, dispose of them"],
       },
     ],
   },
@@ -77,55 +73,60 @@ const PoolPage = ({ location }) => {
   const totalQuestionsNumber = poolData.questions.length - 1
 
   return (
-    <View activePanel={activePanel}>
-      {[
-        ...poolData.questions.map((question, index) => (
-          <Panel id={index}>
-            <PanelHeader>{poolData.title}</PanelHeader>
-
-            <Question
-              question={question}
-              onChange={(value) => {
-                setUserAnswers({
-                  ...userAnswers,
-                  [question.id]: value,
-                })
+    <div>
+      <View activePanel={activePanel}>
+        {[
+          ...poolData.questions.map((question, index) => (
+            <Panel id={index}>
+              <PanelHeader>{poolData.title}</PanelHeader>
+              <div>
+                <Progress value={(activePanel / totalQuestionsNumber) * 100} />
+              </div>
+              <Question
+                question={question}
+                value={userAnswers[question.id]}
+                onChange={(value) => {
+                  setUserAnswers({
+                    ...userAnswers,
+                    [question.id]: value,
+                  })
+                }}
+              />
+              <Div style={{ display: "flex" }}>
+                {activePanel > 0 && (
+                  <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+                )}
+                {activePanel < totalQuestionsNumber ? (
+                  <NextButton onClick={() => setActivePanel(activePanel + 1)} />
+                ) : (
+                  <SubmitButton
+                    onClick={() => {
+                      setActivePanel("confirmation")
+                      console.log(userAnswers)
+                    }}
+                  />
+                )}
+              </Div>
+            </Panel>
+          )),
+          // Extract into separate component
+          <Panel id="confirmation">
+            <Div
+              style={{
+                paddingTop: 30,
+                paddingBottom: 60,
+                color: "gray",
+                textAlign: "center",
               }}
-            />
-            <Div style={{ display: "flex" }}>
-              {activePanel > 0 && (
-                <BackButton onClick={() => setActivePanel(activePanel - 1)} />
-              )}
-              {activePanel < totalQuestionsNumber ? (
-                <NextButton onClick={() => setActivePanel(activePanel + 1)} />
-              ) : (
-                <SubmitButton
-                  onClick={() => {
-                    setActivePanel("confirmation")
-                    console.log(userAnswers)
-                  }}
-                />
-              )}
+            >
+              <h2>Опрос завершен</h2>
+              <br />
+              <p>{poolData.confirmationMessage}</p>
             </Div>
-          </Panel>
-        )),
-        // Extract into separate component
-        <Panel id="confirmation">
-          <Div
-            style={{
-              paddingTop: 30,
-              paddingBottom: 60,
-              color: "gray",
-              textAlign: "center",
-            }}
-          >
-            <h2>Опрос завершен</h2>
-            <br />
-            <p>{poolData.confirmationMessage}</p>
-          </Div>
-        </Panel>,
-      ]}
-    </View>
+          </Panel>,
+        ]}
+      </View>
+    </div>
   )
 }
 
