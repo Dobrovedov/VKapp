@@ -19,9 +19,9 @@ const RadioQuestion = ({ id, title, options, onChange, hasAnotherOption }) => {
       {hasAnotherOption && (
         <Radio
           name={id}
-          description={"Иное"}
+          description={"Другое"}
           onChange={(event) => {
-            onChange({ selectedAnotherOption: true, selectedAnswer: "Another" })
+            onChange({ selectedAnotherOption: true, selectedAnswer: "Другое" })
           }}
         />
       )}
