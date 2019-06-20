@@ -127,11 +127,12 @@ const PoolPage = ({ location }) => {
               <BackButton
                 onClick={() => {
                   const status = questionsStatus
-                  const answer = userAnswers[poolData.questions[activePanel].id]
-                  console.log(answer)
+                  const answer = userAnswers[question.id]
+
                   if (
                     answer !== undefined &&
                     answer.text !== "" &&
+                    answer.selectedAnswers &&
                     answer.selectedAnswers.length !== 0
                   ) {
                     status[activePanel] = "valid"
@@ -149,11 +150,11 @@ const PoolPage = ({ location }) => {
               <NextButton
                 onClick={() => {
                   const status = questionsStatus
-                  const answer = userAnswers[poolData.questions[activePanel].id]
-                  console.log(answer)
+                  const answer = userAnswers[question.id]
                   if (
                     answer !== undefined &&
                     answer.text !== "" &&
+                    answer.selectedAnswers &&
                     answer.selectedAnswers.length !== 0
                   ) {
                     status[activePanel] = "valid"
