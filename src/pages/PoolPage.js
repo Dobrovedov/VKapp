@@ -93,19 +93,21 @@ const PoolPage = ({ location }) => {
                   })
                 }}
               />
-              {activePanel > 0 && (
-                <BackButton onClick={() => setActivePanel(activePanel - 1)} />
-              )}
-              {activePanel < totalQuestionsNumber ? (
-                <NextButton onClick={() => setActivePanel(activePanel + 1)} />
-              ) : (
-                <SubmitButton
-                  onClick={() => {
-                    setActivePanel("confirmation")
-                    console.log(userAnswers)
-                  }}
-                />
-              )}
+              <Div style={{ display: "flex" }}>
+                {activePanel > 0 && (
+                  <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+                )}
+                {activePanel < totalQuestionsNumber ? (
+                  <NextButton onClick={() => setActivePanel(activePanel + 1)} />
+                ) : (
+                  <SubmitButton
+                    onClick={() => {
+                      setActivePanel("confirmation")
+                      console.log(userAnswers)
+                    }}
+                  />
+                )}
+              </Div>
             </Panel>
           )),
           // Extract into separate component
