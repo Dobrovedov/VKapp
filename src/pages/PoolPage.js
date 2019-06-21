@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 
 import { View, Panel, PanelHeader, Div, Progress } from "@vkontakte/vkui"
+import PanelSpinner from "@vkontakte/vkui/dist/components/PanelSpinner/PanelSpinner"
 import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
 import SubmitButton from "../components/SubmitButton"
@@ -31,7 +32,7 @@ const PoolPage = () => {
 
   // Make loading Page or Spinner
   if (isLoading) {
-    return "Loading..."
+    return <PanelSpinner />
   }
 
   if (!poolData || !poolId) {
