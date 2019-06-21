@@ -72,7 +72,7 @@ const PoolPage = () => {
                 {activePanel > 0 && (
                   <BackButton onClick={() => setActivePanel(activePanel - 1)} />
                 )}
-                {activePanel < totalQuestionsNumber ? (
+                {index < totalQuestionsNumber ? (
                   <NextButton onClick={() => setActivePanel(activePanel + 1)} />
                 ) : (
                   <SubmitButton
