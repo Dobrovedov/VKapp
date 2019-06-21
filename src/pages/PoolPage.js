@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import { View, Panel, PanelHeader, Div, Progress } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
@@ -8,66 +8,33 @@ import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 
-const mockPoolList = [
-  {
-    id: "12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ",
+import { getSurvey, sendAnswers } from "../api"
+import prepareResponse from "../prepareResponse"
 
-    title: "Заголовок опроса",
-    description: "Описание опроса",
-    companyId: "",
-    editorEmails: ["stevenschmatz@gmail.com"],
-    confirmationMessage: "Thanks for submitting your contact info!",
-
-    questions: [
-      {
-        type: "TEXTAREA",
-        helpText: "Little description",
-        placeholder: "",
-        title: "Name",
-        id: 1633920210,
-        isRequired: false,
-      },
-      {
-        type: "MULTIPLE_CHOICE",
-        helpText: "",
-        id: 1770822543,
-        title: "How much do you like choices?",
-        isRequired: false,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["I choose you!", "No, you!", "Never mind, you!"],
-      },
-      {
-        type: "CHECKBOX",
-        helpText: "Description",
-        id: 1846923513,
-        title: "How much do you like checkboxes?",
-        isRequired: false,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
-      },
-      {
-        type: "DROPDOWN",
-        helpText: "",
-        id: 449887830,
-        title: "How much do you like dropdowns?",
-        isRequired: false,
-        placeholder: "",
-        options: ["I love it <3", "So-so", "Nah, dispose of them"],
-      },
-    ],
-  },
-]
-
-const PoolPage = ({ location }) => {
-  const poolId = location.pathname.slice(1)
-  const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
-
+const PoolPage = () => {
+  const poolId = window.location.hash.slice(1)
+  const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState([])
 
-  if (!poolData) {
+  const [isLoading, setIsLoading] = useState(true)
+
+  console.log(userAnswers)
+
+  // Data Retrieval
+  useEffect(() => {
+    getSurvey(poolId).then((res) => {
+      setPoolData(res.data)
+      setIsLoading(false)
+    })
+  }, [poolId])
+
+  // Make loading Page or Spinner
+  if (isLoading) {
+    return "Loading..."
+  }
+
+  if (!poolData || !poolId) {
     return <ErrorPage />
   }
 
@@ -79,7 +46,7 @@ const PoolPage = ({ location }) => {
         {[
           ...poolData.questions.map((question, index) => (
             <Panel id={index}>
-              <PanelHeader>{poolData.title}</PanelHeader>
+              <PanelHeader>{poolData.meta.title}</PanelHeader>
               <div>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
               </div>
@@ -89,10 +56,11 @@ const PoolPage = ({ location }) => {
                 onChange={(value) => {
                   setUserAnswers({
                     ...userAnswers,
-                    [question.id]: value,
+                    [question.id]: { type: question.type, ...value },
                   })
                 }}
               />
+              {/* Extract into SurveyPageControls.js */}
               <Div style={{ display: "flex" }}>
                 {activePanel > 0 && (
                   <BackButton onClick={() => setActivePanel(activePanel - 1)} />
@@ -102,8 +70,8 @@ const PoolPage = ({ location }) => {
                 ) : (
                   <SubmitButton
                     onClick={() => {
+                      sendAnswers(prepareResponse(poolData.id, userAnswers))
                       setActivePanel("confirmation")
-                      console.log(userAnswers)
                     }}
                   />
                 )}
@@ -112,7 +80,9 @@ const PoolPage = ({ location }) => {
           )),
           // Extract into separate component
           <Panel id="confirmation">
-            <ThanksPanel confirmationMessage={poolData.confirmationMessage} />
+            <ThanksPanel
+              confirmationMessage={poolData.meta.confirmationMessage}
+            />
           </Panel>,
         ]}
       </View>
