@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import {
   View,
@@ -82,25 +82,31 @@ const PoolPage = ({ location }) => {
     poolData.questions.map(() => "valid"),
   )
 
-  const handleError = (question) => {
-    const status = questionsStatus
-    const answer = userAnswers[question.id]
+  const handleError = useEffect(
+    (question, next) => {
+      const status = questionsStatus
+      const answer = userAnswers[question.id]
 
-    if (
-      answer !== undefined &&
-      answer.text !== "" &&
-      answer.selectedAnswers &&
-      answer.selectedAnswers.length !== 0
-    ) {
-      status[activePanel] = "valid"
-    } else {
-      status[activePanel] = "error"
-    }
+      if (
+        answer !== undefined &&
+        ((answer.text !== undefined && answer.text.length > 0) ||
+          (answer.selectedAnswer !== undefined &&
+            answer.selectedAnswer.length > 0) ||
+          (answer.selectedAnswers !== undefined &&
+            answer.selectedAnswers.length > 0))
+      ) {
+        status[activePanel] = "valid"
+      } else if (next !== undefined) {
+        status[activePanel] = "error"
+      }
 
-    setQuestionsStatus(status)
-  }
-
-  console.log(userAnswers)
+      setQuestionsStatus(status)
+      if (questionsStatus[activePanel] === "valid" && next !== undefined) {
+        setActivePanel(next)
+      }
+    },
+    [questionsStatus, userAnswers],
+  )
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -141,22 +147,23 @@ const PoolPage = ({ location }) => {
                     ...userAnswers,
                     [question.id]: value,
                   })
+                  handleError(question)
                 }}
               />
               <Div style={{ display: "flex" }}>
                 {activePanel > 0 && (
                   <BackButton
                     onClick={() => {
-                      handleError(question)
-                      setActivePanel(activePanel - 1)
+                      handleError(question, activePanel - 1)
+                      //setActivePanel(activePanel - 1)
                     }}
                   />
                 )}
                 {activePanel < totalQuestionsNumber ? (
                   <NextButton
                     onClick={() => {
-                      handleError(question)
-                      setActivePanel(activePanel + 1)
+                      handleError(question, activePanel + 1)
+                      //setActivePanel(activePanel + 1)
                     }}
                   />
                 ) : (
