@@ -5,7 +5,7 @@ import { Button } from "@vkontakte/vkui"
 
 const SubmitButton = ({ onClick }) => {
   return (
-    <Button size="l" stretched onClick={onClick}>
+    <Button size="l" level="commerce" stretched onClick={onClick}>
       Завершить
     </Button>
   )
