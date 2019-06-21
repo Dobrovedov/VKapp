@@ -68,6 +68,23 @@ const mockPoolList = [
   },
 ]
 
+const validateAnswers = (answers) => {
+  // Выполняешь проверку в зависимости от типа данных
+  // Можешь запросить дополнительные данные для функции из рендера
+  // Все объекты не прошедшие проверку
+  // Возвращаешь в формет
+  // {
+  //   832634124914: "Какое-то значение"
+  // }
+  // Данный способ работает при каждом рендере компонента
+  // По возможности старайся не мутировать состояния
+  // В ином случае скорее всего возникнут ошибки
+  // Пример ошибки на 3 объекте я превел
+  return {
+    1846923513: "Выберите хотя бы один пункт",
+  }
+}
+
 const PoolPage = ({ location }) => {
   const poolId = location.pathname.slice(1)
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
@@ -78,35 +95,9 @@ const PoolPage = ({ location }) => {
 
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
-  const [questionsStatus, setQuestionsStatus] = useState(
-    poolData.questions.map(() => "valid"),
-  )
+  const errors = validateAnswers(userAnswers)
 
-  const handleError = useEffect(
-    (question, next) => {
-      const status = questionsStatus
-      const answer = userAnswers[question.id]
-
-      if (
-        answer !== undefined &&
-        ((answer.text !== undefined && answer.text.length > 0) ||
-          (answer.selectedAnswer !== undefined &&
-            answer.selectedAnswer.length > 0) ||
-          (answer.selectedAnswers !== undefined &&
-            answer.selectedAnswers.length > 0))
-      ) {
-        status[activePanel] = "valid"
-      } else if (next !== undefined) {
-        status[activePanel] = "error"
-      }
-
-      setQuestionsStatus(status)
-      if (questionsStatus[activePanel] === "valid" && next !== undefined) {
-        setActivePanel(next)
-      }
-    },
-    [questionsStatus, userAnswers],
-  )
+  console.log(errors)
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -120,25 +111,16 @@ const PoolPage = ({ location }) => {
               <div>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
               </div>
-              {questionsStatus[index] === "error" ? (
+              {errors[question.id] && (
                 <FormLayout>
                   <FormStatus
                     title="Неккоректые данные"
-                    state={questionsStatus[index]}
+                    state={errors[question.id]}
                   >
-                    {(() => {
-                      switch (question.type) {
-                        case "TEXTAREA":
-                        case "DROPDOWN":
-                          return "Поле не должно оставаться пустым"
-                        case "CHECKBOX":
-                        case "MULTIPLE_CHOICE":
-                          return "Не выбран ни один вариант"
-                      }
-                    })()}
+                    {errors[question.id]}
                   </FormStatus>
                 </FormLayout>
-              ) : null}
+              )}
               <Question
                 question={question}
                 value={userAnswers[question.id]}
@@ -147,33 +129,26 @@ const PoolPage = ({ location }) => {
                     ...userAnswers,
                     [question.id]: value,
                   })
-                  handleError(question)
                 }}
               />
               <Div style={{ display: "flex" }}>
                 {activePanel > 0 && (
                   <BackButton
                     onClick={() => {
-                      handleError(question, activePanel - 1)
-                      //setActivePanel(activePanel - 1)
+                      setActivePanel(activePanel - 1)
                     }}
                   />
                 )}
                 {activePanel < totalQuestionsNumber ? (
                   <NextButton
                     onClick={() => {
-                      handleError(question, activePanel + 1)
-                      //setActivePanel(activePanel + 1)
+                      setActivePanel(activePanel + 1)
                     }}
                   />
                 ) : (
                   <SubmitButton
                     onClick={() => {
-                      if (questionsStatus.some((item) => item === "error")) {
-                        return
-                      }
                       setActivePanel("confirmation")
-                      console.log(userAnswers)
                     }}
                   />
                 )}
