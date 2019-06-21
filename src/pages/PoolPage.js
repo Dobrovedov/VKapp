@@ -8,6 +8,8 @@ import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 
+import axios from "axios"
+
 const mockPoolList = [
   {
     id: "12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ",
@@ -66,6 +68,10 @@ const PoolPage = () => {
 
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState([])
+
+  fetch(`https://foodtechmoneymaker.herokuapp.com/surveys/${poolId}`, {
+    mode: "no-cors",
+  }).then((res) => console.log(res))
 
   if (!poolData) {
     return <ErrorPage />
