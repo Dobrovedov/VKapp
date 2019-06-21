@@ -6,7 +6,7 @@ import {
   PanelHeader,
   Div,
   Progress,
-  ScreenSpinner,
+  Spinner,
 } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
 import NextButton from "../components/NextButton"
@@ -38,7 +38,7 @@ const PoolPage = () => {
 
   // Make loading Page or Spinner
   if (isLoading) {
-    return <ScreenSpinner />
+    return <Spinner size="large" />
   }
 
   if (!poolData || !poolId) {
