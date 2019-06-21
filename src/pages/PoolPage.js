@@ -60,8 +60,8 @@ const mockPoolList = [
   },
 ]
 
-const PoolPage = ({ location }) => {
-  const poolId = location.pathname.slice(1)
+const PoolPage = () => {
+  const poolId = window.location.hash.slice(1)
   const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
 
   const [activePanel, setActivePanel] = useState(0)
