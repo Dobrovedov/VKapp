@@ -32,7 +32,7 @@ const PoolPage = () => {
 
   // Make loading Page or Spinner
   if (isLoading) {
-    return <PanelSpinner />
+    return <PanelSpinner height={240} size={20} />
   }
 
   if (!poolData || !poolId) {
