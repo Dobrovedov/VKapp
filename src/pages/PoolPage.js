@@ -8,7 +8,8 @@ import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 
-import axios from "axios"
+import { getSurvey, sendAnswers } from "../api"
+import prepareResponse from "../prepareResponse"
 
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
@@ -18,16 +19,14 @@ const PoolPage = () => {
 
   const [isLoading, setIsLoading] = useState(true)
 
+  console.log(userAnswers)
+
   // Data Retrieval
   useEffect(() => {
-    axios
-      .get(`https://foodtechmoneymaker.herokuapp.com/surveys/${poolId}`, {
-        mode: "no-cors",
-      })
-      .then((res) => {
-        setPoolData(res.data)
-        setIsLoading(false)
-      })
+    getSurvey(poolId).then((res) => {
+      setPoolData(res.data)
+      setIsLoading(false)
+    })
   }, [poolId])
 
   // Make loading Page or Spinner
@@ -57,7 +56,7 @@ const PoolPage = () => {
                 onChange={(value) => {
                   setUserAnswers({
                     ...userAnswers,
-                    [question.id]: value,
+                    [question.id]: { type: question.type, ...value },
                   })
                 }}
               />
@@ -71,8 +70,8 @@ const PoolPage = () => {
                 ) : (
                   <SubmitButton
                     onClick={() => {
+                      sendAnswers(prepareResponse(poolData.id, userAnswers))
                       setActivePanel("confirmation")
-                      console.log(userAnswers)
                     }}
                   />
                 )}
