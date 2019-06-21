@@ -5,7 +5,15 @@ import { Button } from "@vkontakte/vkui"
 
 const SubmitButton = ({ onClick }) => {
   return (
-    <Button size="l" stretched onClick={onClick}>
+    <Button
+      size="l"
+      stretched
+      onClick={onClick}
+      style={{
+        background: "#4bb34b",
+        color: "white",
+      }}
+    >
       Завершить
     </Button>
   )
