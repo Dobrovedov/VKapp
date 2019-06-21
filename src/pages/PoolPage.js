@@ -68,21 +68,36 @@ const mockPoolList = [
   },
 ]
 
-const validateAnswers = (answers) => {
-  // Выполняешь проверку в зависимости от типа данных
-  // Можешь запросить дополнительные данные для функции из рендера
-  // Все объекты не прошедшие проверку
-  // Возвращаешь в формет
-  // {
-  //   832634124914: "Какое-то значение"
-  // }
-  // Данный способ работает при каждом рендере компонента
-  // По возможности старайся не мутировать состояния
-  // В ином случае скорее всего возникнут ошибки
-  // Пример ошибки на 3 объекте я превел
-  return {
-    1846923513: "Выберите хотя бы один пункт",
+const validateTextarea = (value) => {
+  if (!value.text) {
+    return "Заполните поле"
   }
+}
+
+const validateBox = (value) => {
+  console.log(value)
+  if (value.selectedAnswers && value.selectedAnswers.length === 0) {
+    return "Выберите хотя бы одно поле"
+  }
+}
+
+const validateAnswer = (question, value) => {
+  let validationResult
+
+  switch (question.type) {
+    case "TEXTAREA":
+      validationResult = validateTextarea(value)
+      break
+    case "MULTIPLE_CHOICE":
+    case "CHECKBOX":
+    case "DROPDOWN":
+      validationResult = validateBox(value)
+      break
+    default:
+      break
+  }
+
+  return { [question.id]: validationResult }
 }
 
 const PoolPage = ({ location }) => {
@@ -94,10 +109,8 @@ const PoolPage = ({ location }) => {
   }
 
   const [activePanel, setActivePanel] = useState(0)
-  const [userAnswers, setUserAnswers] = useState({})
-  const errors = validateAnswers(userAnswers)
-
-  console.log(errors)
+  const [store, setStore] = useState({ errors: {}, answers: {} })
+  const [seenQuestions, setSeenQuestions] = useState([])
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -111,23 +124,29 @@ const PoolPage = ({ location }) => {
               <div>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
               </div>
-              {errors[question.id] && (
-                <FormLayout>
-                  <FormStatus
-                    title="Неккоректые данные"
-                    state={errors[question.id]}
-                  >
-                    {errors[question.id]}
-                  </FormStatus>
-                </FormLayout>
-              )}
+              <div>
+                {store.errors[question.id] &&
+                  seenQuestions.indexOf(question.id) !== -1 && (
+                    <FormLayout>
+                      <FormStatus state={"error"}>
+                        {store.errors[question.id]}
+                      </FormStatus>
+                    </FormLayout>
+                  )}
+              </div>
               <Question
                 question={question}
-                value={userAnswers[question.id]}
+                value={store.answers[question.id]}
                 onChange={(value) => {
-                  setUserAnswers({
-                    ...userAnswers,
-                    [question.id]: value,
+                  setStore({
+                    errors: {
+                      ...store.errors,
+                      ...validateAnswer(question, value),
+                    },
+                    answers: {
+                      ...store.answers,
+                      [question.id]: value,
+                    },
                   })
                 }}
               />
@@ -142,6 +161,7 @@ const PoolPage = ({ location }) => {
                 {activePanel < totalQuestionsNumber ? (
                   <NextButton
                     onClick={() => {
+                      setSeenQuestions([...seenQuestions, question.id]) // remove duplicate ids
                       setActivePanel(activePanel + 1)
                     }}
                   />

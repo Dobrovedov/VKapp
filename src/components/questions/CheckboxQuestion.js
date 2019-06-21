@@ -13,8 +13,9 @@ const CheckboxQuestion = ({
   hasAnotherOption,
 }) => {
   const [chosenAnswers, setChosenAnswers] = useState(value.selectedAnswers)
-  const [isAnotherOptionChecked, setIsAnotherOptionChecked] = useState(false)
-
+  const isAnotherOptionChecked = chosenAnswers.some(
+    (answer) => answer === "Другое",
+  )
   useEffect(() => {
     onChange({
       selectedAnotherOption: isAnotherOptionChecked,
@@ -54,7 +55,6 @@ const CheckboxQuestion = ({
                 chosenAnswers.filter((answer) => answer !== "Другое"),
               )
             }
-            setIsAnotherOptionChecked(!isAnotherOptionChecked)
           }}
         >
           Другое
