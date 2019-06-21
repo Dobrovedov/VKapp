@@ -47,7 +47,7 @@ const PoolPage = () => {
         {[
           ...poolData.questions.map((question, index) => (
             <Panel id={index}>
-              <PanelHeader>{poolData.title}</PanelHeader>
+              <PanelHeader>{poolData.meta.title}</PanelHeader>
               <div>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
               </div>
