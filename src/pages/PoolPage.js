@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import { View, Panel, PanelHeader, Div, Progress } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
@@ -10,68 +10,29 @@ import ThanksPanel from "../components/ThanksPanel"
 
 import axios from "axios"
 
-const mockPoolList = [
-  {
-    id: "12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ",
-
-    title: "Заголовок опроса",
-    description: "Описание опроса",
-    companyId: "",
-    editorEmails: ["stevenschmatz@gmail.com"],
-    confirmationMessage: "Thanks for submitting your contact info!",
-
-    questions: [
-      {
-        type: "TEXTAREA",
-        helpText: "Little description",
-        placeholder: "",
-        title: "Name",
-        id: 1633920210,
-        isRequired: false,
-      },
-      {
-        type: "MULTIPLE_CHOICE",
-        helpText: "",
-        id: 1770822543,
-        title: "How much do you like choices?",
-        isRequired: false,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["I choose you!", "No, you!", "Never mind, you!"],
-      },
-      {
-        type: "CHECKBOX",
-        helpText: "Description",
-        id: 1846923513,
-        title: "How much do you like checkboxes?",
-        isRequired: false,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
-      },
-      {
-        type: "DROPDOWN",
-        helpText: "",
-        id: 449887830,
-        title: "How much do you like dropdowns?",
-        isRequired: false,
-        placeholder: "",
-        options: ["I love it <3", "So-so", "Nah, dispose of them"],
-      },
-    ],
-  },
-]
-
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
-  const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
-
+  const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState([])
 
-  fetch(`https://foodtechmoneymaker.herokuapp.com/surveys/${poolId}`, {
-    mode: "no-cors",
-  }).then((res) => console.log(res))
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    axios
+      .get(`https://foodtechmoneymaker.herokuapp.com/surveys/${poolId}`, {
+        mode: "no-cors",
+      })
+      .then((res) => {
+        setPoolData(res.data)
+        setIsLoading(false)
+      })
+  }, [poolId])
+
+  // Make loading Page or Spinner
+  if (isLoading) {
+    return "Loading..."
+  }
 
   if (!poolData) {
     return <ErrorPage />
@@ -118,7 +79,9 @@ const PoolPage = () => {
           )),
           // Extract into separate component
           <Panel id="confirmation">
-            <ThanksPanel confirmationMessage={poolData.confirmationMessage} />
+            <ThanksPanel
+              confirmationMessage={poolData.meta.confirmationMessage}
+            />
           </Panel>,
         ]}
       </View>
