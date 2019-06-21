@@ -18,6 +18,7 @@ const PoolPage = () => {
 
   const [isLoading, setIsLoading] = useState(true)
 
+  // Data Retrieval
   useEffect(() => {
     axios
       .get(`https://foodtechmoneymaker.herokuapp.com/surveys/${poolId}`, {
@@ -34,7 +35,7 @@ const PoolPage = () => {
     return "Loading..."
   }
 
-  if (!poolData) {
+  if (!poolData || !poolId) {
     return <ErrorPage />
   }
 
@@ -60,6 +61,7 @@ const PoolPage = () => {
                   })
                 }}
               />
+              {/* Extract into SurveyPageControls.js */}
               <Div style={{ display: "flex" }}>
                 {activePanel > 0 && (
                   <BackButton onClick={() => setActivePanel(activePanel - 1)} />
