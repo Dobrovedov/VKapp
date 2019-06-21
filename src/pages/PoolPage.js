@@ -68,7 +68,7 @@ const mockPoolList = [
   },
 ]
 
-const validateAnswers = (answers) => {
+const validateAnswers = (answers, questions) => {
   // Выполняешь проверку в зависимости от типа данных
   // Можешь запросить дополнительные данные для функции из рендера
   // Все объекты не прошедшие проверку
@@ -80,9 +80,41 @@ const validateAnswers = (answers) => {
   // По возможности старайся не мутировать состояния
   // В ином случае скорее всего возникнут ошибки
   // Пример ошибки на 3 объекте я превел
-  return {
-    1846923513: "Выберите хотя бы один пункт",
+
+  const status = {}
+
+  const getMessage = (question, answer) => {
+    switch (question.type) {
+      case "TEXTAREA":
+        if (!answer || answer.text.search(/\S/) === -1) {
+          return "Поле не должно оставаться пустым"
+        }
+        break
+      case "DROPDOWN":
+        if (!answer || !answer.selectedAnswer) {
+          return "Поле не должно оставаться пустым"
+        }
+        break
+      case "CHECKBOX":
+        if (!answer || answer.selectedAnswers.length === 0) {
+          return "Не выбран ни один вариант"
+        }
+        break
+      case "MULTIPLE_CHOICE":
+        if (!answer || !answer.selectedAnswer === 0) {
+          return "Не выбран ни один вариант"
+        }
+        break
+    }
+    return null
   }
+
+  questions.forEach((question) => {
+    const answer = answers[question.id]
+    status[question.id] = getMessage(question, answer)
+  })
+
+  return status
 }
 
 const PoolPage = ({ location }) => {
@@ -95,7 +127,8 @@ const PoolPage = ({ location }) => {
 
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
-  const errors = validateAnswers(userAnswers)
+
+  const errors = validateAnswers(userAnswers, poolData.questions)
 
   console.log(errors)
 
@@ -113,10 +146,7 @@ const PoolPage = ({ location }) => {
               </div>
               {errors[question.id] && (
                 <FormLayout>
-                  <FormStatus
-                    title="Неккоректые данные"
-                    state={errors[question.id]}
-                  >
+                  <FormStatus title="Неккоректые данные" state="error">
                     {errors[question.id]}
                   </FormStatus>
                 </FormLayout>
@@ -148,7 +178,17 @@ const PoolPage = ({ location }) => {
                 ) : (
                   <SubmitButton
                     onClick={() => {
-                      setActivePanel("confirmation")
+                      let existError = false
+                      for (let id in Object.keys(errors)) {
+                        if (errors[id]) {
+                          existError = true
+                          break
+                        }
+                      }
+
+                      if (Object.keys(errors).length === 0 || !existError) {
+                        setActivePanel("confirmation")
+                      }
                     }}
                   />
                 )}
