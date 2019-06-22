@@ -12,7 +12,7 @@ const ThanksPanel = ({ confirmationMessage }) => {
         textAlign: "center",
       }}
     >
-      <h2>Опрос завершен</h2>
+      <h2>Опрос завершён</h2>
       <img
         className="Sticker"
         src={"../img/sticker/" + (Math.floor(Math.random() * 10) + 1) + ".png"}
