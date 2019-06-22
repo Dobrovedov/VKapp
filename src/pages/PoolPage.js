@@ -94,7 +94,10 @@ const PoolPage = () => {
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
-                    sendAnswers(prepareResponse(poolData.id, userAnswers))
+                    sendAnswers(
+                      poolData.id,
+                      prepareResponse(poolData.id, userAnswers),
+                    )
                     setActivePanel("confirmation")
                   }}
                   isNextButtonDisabled={!!error}
