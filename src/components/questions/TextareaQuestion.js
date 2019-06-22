@@ -14,7 +14,9 @@ const TextareaQuestion = ({
 }) => {
   return (
     <>
-      <Cell description={description}>{title}</Cell>
+      <Cell description={description} multiline>
+        {title}
+      </Cell>
       <Input
         type="text"
         name={id}

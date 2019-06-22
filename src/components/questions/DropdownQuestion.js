@@ -15,7 +15,9 @@ const DropdownQuestion = ({
   console.log(value.selectedAnswer)
   return (
     <>
-      <Cell description={description}>{title}</Cell>
+      <Cell description={description} multiline>
+        {title}
+      </Cell>
       <Select
         id={id}
         placeholder={placeholder}
