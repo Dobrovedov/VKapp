@@ -16,16 +16,10 @@ import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import QuestionControls from "../components/QuestionControls/"
 
+import usePrevious from "../hooks/usePrevious"
+
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
-
-const usePrevious = (value) => {
-  const ref = useRef()
-  useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
-}
 
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
@@ -33,14 +27,11 @@ const PoolPage = () => {
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
-  const [wasFirstResponse, setFirstResponse] = useState(false)
   const [responseId, setResponseId] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
-
-  console.log(userAnswers)
 
   // Data Retrieval
   useEffect(() => {
@@ -51,35 +42,45 @@ const PoolPage = () => {
   }, [poolId])
 
   const sendRequestByNext = (question) => {
-    if (prevUserAnswer[question.id] !== userAnswers[question.id]) {
-      if (!wasFirstResponse) {
-        sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
-          (response) => {
-            setResponseId(response.data.id)
-            console.log(response.data.id)
-          },
-        )
-        setFirstResponse(true)
-      } else if (responseId != null) {
-        sendChangedAnswers(
-          poolId,
-          responseId,
-          prepareResponse(poolData.id, userAnswers),
-        )
-      }
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
     }
+
+    // Generate new response
+    // If no was provided before
+    if (!responseId) {
+      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
+        (response) => {
+          setResponseId(response.data.id)
+        },
+      )
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
   }
   const sendRequestByBack = (question) => {
-    if (
-      responseId != null &&
-      prevUserAnswer[question.id] !== userAnswers[question.id]
-    ) {
-      sendChangedAnswers(
-        poolId,
-        responseId,
-        prepareResponse(poolData.id, userAnswers),
-      )
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
     }
+
+    if (!responseId) {
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
   }
 
   // Make loading Page or Spinner
