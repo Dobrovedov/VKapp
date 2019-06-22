@@ -5,7 +5,15 @@ import { Button } from "@vkontakte/vkui"
 
 const SubmitButton = ({ onClick, disabled }) => {
   return (
-    <Button size="l" stretched onClick={onClick} disabled={disabled}>
+    <Button
+      size="l"
+      stretched
+      onClick={onClick}
+      style={{
+        background: "#4bb34b",
+        color: "white",
+      }}
+    >
       Завершить
     </Button>
   )

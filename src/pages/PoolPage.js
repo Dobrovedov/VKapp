@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 import {
   View,
@@ -7,29 +7,45 @@ import {
   FormLayout,
   FormStatus,
   Progress,
+  Spinner,
 } from "@vkontakte/vkui"
 import { validateAnswer } from "../utils/validators"
+
 import ErrorPage from "../pages/ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import QuestionControls from "../components/QuestionControls/"
 
-// Temporary
-// Remove when will occurs merge with master
-// Also change name of the file
-import mockPoolList from "../mockSurveyList"
+import { getSurvey, sendAnswers } from "../api"
+import prepareResponse from "../prepareResponse"
 
-const PoolPage = ({ location }) => {
-  const poolId = location.pathname.slice(1)
-  const poolData = mockPoolList.filter((pool) => pool.id === poolId)[0]
-
-  if (!poolData) {
-    return <ErrorPage />
-  }
-
+const PoolPage = () => {
+  const poolId = window.location.hash.slice(1)
+  const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
+
+  const [isLoading, setIsLoading] = useState(true)
+
+  console.log(userAnswers)
+
+  // Data Retrieval
+  useEffect(() => {
+    getSurvey(poolId).then((res) => {
+      setPoolData(res.data)
+      setIsLoading(false)
+    })
+  }, [poolId])
+
+  // Make loading Page or Spinner
+  if (isLoading) {
+    return <Spinner size="large" />
+  }
+
+  if (!poolData || !poolId) {
+    return <ErrorPage />
+  }
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
@@ -59,7 +75,7 @@ const PoolPage = ({ location }) => {
                   onChange={(value) => {
                     setUserAnswers({
                       ...userAnswers,
-                      [question.id]: value,
+                      [question.id]: { type: question.type, ...value },
                     })
                   }}
                 />
@@ -72,6 +88,7 @@ const PoolPage = ({ location }) => {
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
+                    sendAnswers(prepareResponse(poolData.id, userAnswers))
                     setActivePanel("confirmation")
                   }}
                   isNextButtonDisabled={!!error}
@@ -83,7 +100,9 @@ const PoolPage = ({ location }) => {
           }),
           // Extract into separate component
           <Panel id="confirmation">
-            <ThanksPanel confirmationMessage={poolData.confirmationMessage} />
+            <ThanksPanel
+              confirmationMessage={poolData.meta.confirmationMessage}
+            />
           </Panel>,
         ]}
       </View>
