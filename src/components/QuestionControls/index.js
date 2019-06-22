@@ -1,9 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import NextButton from "../components/NextButton"
-import SubmitButton from "../components/SubmitButton"
-import BackButton from "../components/BackButton"
+import NextButton from "./NextButton"
+import SubmitButton from "./SubmitButton"
+import BackButton from "./BackButton"
 
 import { Div } from "@vkontakte/vkui"
 

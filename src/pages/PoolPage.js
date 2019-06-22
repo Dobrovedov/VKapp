@@ -4,101 +4,20 @@ import {
   View,
   Panel,
   PanelHeader,
-  Div,
   FormLayout,
   FormStatus,
   Progress,
 } from "@vkontakte/vkui"
+import { validateAnswer } from "../utils/validators"
 import ErrorPage from "../pages/ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
-import QuestionControls from "../components/QuestionControls"
+import QuestionControls from "../components/QuestionControls/"
 
-const mockPoolList = [
-  {
-    id: "12XJWWr-Z8gkRdxrkwoU8CYg1h8GqWv3OJh-AOLzpyyQ",
-
-    title: "Заголовок опроса",
-    description: "Описание опроса",
-    companyId: "",
-    editorEmails: ["stevenschmatz@gmail.com"],
-    confirmationMessage: "Thanks for submitting your contact info!",
-
-    questions: [
-      {
-        type: "TEXTAREA",
-        helpText: "Little description",
-        placeholder: "",
-        title: "Name",
-        id: 1633920210,
-        isRequired: true,
-      },
-      {
-        type: "MULTIPLE_CHOICE",
-        helpText: "",
-        id: 1770822543,
-        title: "How much do you like choices?",
-        isRequired: true,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["I choose you!", "No, you!", "Never mind, you!"],
-      },
-      {
-        type: "CHECKBOX",
-        helpText: "Description",
-        id: 1846923513,
-        title: "How much do you like checkboxes?",
-        isRequired: true,
-        hasOtherOption: true,
-        placeholder: "",
-        options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
-      },
-      {
-        type: "DROPDOWN",
-        helpText: "",
-        id: 449887830,
-        title: "How much do you like dropdowns?",
-        isRequired: true,
-        placeholder: "",
-        options: ["I love it <3", "So-so", "Nah, dispose of them"],
-      },
-    ],
-  },
-]
-
-const validateTextarea = (value) => {
-  if (!value || !value.text) {
-    return "Заполните поле"
-  }
-}
-
-const validateCheckboxAndDropdown = (value) => {
-  if (!value || !value.selectedAnswers || value.selectedAnswers.length === 0) {
-    return "Выберите хотя бы одно поле"
-  }
-}
-
-const validateRadiobox = (value) => {
-  if (!value || !value.selectedAnswer) {
-    return "Выберите хотя бы один ответ"
-  }
-}
-
-const validateAnswer = (type, value) => {
-  if (type === "TEXTAREA") {
-    return validateTextarea(value)
-  }
-
-  if (type === "MULTIPLE_CHOICE") {
-    return validateRadiobox(value)
-  }
-
-  if (type === "CHECKBOX" || type === "DROPDOWN") {
-    return validateCheckboxAndDropdown(value)
-  }
-
-  return "Неизвестная ошибка"
-}
+// Temporary
+// Remove when will occurs merge with master
+// Also change name of the file
+import mockPoolList from "../mockSurveyList"
 
 const PoolPage = ({ location }) => {
   const poolId = location.pathname.slice(1)
