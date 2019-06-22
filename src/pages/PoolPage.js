@@ -82,7 +82,6 @@ const validateCheckboxAndDropdown = (value) => {
 
 const validateRadiobox = (value) => {
   if (!value || !value.selectedAnswer) {
-    console.log("yep")
     return "Выберите хотя бы один ответ"
   }
 }
