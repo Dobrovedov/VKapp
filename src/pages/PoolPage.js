@@ -14,6 +14,7 @@ import { validateAnswer } from "../utils/validators"
 import ErrorPage from "../pages/ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
+import WelcomePanel from "../components/WelcomePanel"
 import QuestionControls from "../components/QuestionControls/"
 
 import usePrevious from "../hooks/usePrevious"
@@ -24,7 +25,7 @@ import prepareResponse from "../prepareResponse"
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
-  const [activePanel, setActivePanel] = useState(0)
+  const [activePanel, setActivePanel] = useState("Welcome")
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
   const [responseId, setResponseId] = useState(null)
@@ -104,6 +105,15 @@ const PoolPage = () => {
     <div>
       <View activePanel={activePanel}>
         {[
+          <Panel id="Welcome">
+            <WelcomePanel
+              onClick={() => {
+                setActivePanel(0)
+              }}
+              title={poolData.meta.title}
+              description={poolData.meta.description}
+            />
+          </Panel>,
           ...poolData.questions.map((question, index) => {
             const error =
               question.required &&
