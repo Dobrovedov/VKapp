@@ -42,7 +42,6 @@ TextareaQuestion.propTypes = {
   description: PropTypes.string.isRequired,
   value: PropTypes.object,
   placeholder: PropTypes.string,
-  mandatory: PropTypes.bool,
 }
 
 export default TextareaQuestion

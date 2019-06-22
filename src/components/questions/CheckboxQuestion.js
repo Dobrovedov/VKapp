@@ -69,7 +69,6 @@ CheckboxQuestion.defaultProps = {
     selectedAnotherOption: false,
     selectedAnswers: [],
   },
-  mandatory: false,
   hasAnotherOption: false,
 }
 

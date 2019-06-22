@@ -17,7 +17,6 @@ const Question = ({ question, value, onChange, status }) => {
           title={question.title}
           description={question.helpText}
           placeholder={question.placeholder}
-          mandatory={question.isRequired}
           value={value}
           onChange={onChange}
         />
@@ -33,7 +32,6 @@ const Question = ({ question, value, onChange, status }) => {
           title={question.title}
           description={question.helpText}
           placeholder={question.placeholder}
-          mandatory={question.isRequired}
           options={question.options}
           hasAnotherOption={question.hasOtherOption}
           value={value}
@@ -51,7 +49,6 @@ const Question = ({ question, value, onChange, status }) => {
           title={question.title}
           description={question.helpText}
           options={question.options}
-          mandatory={question.isRequired}
           hasAnotherOption={question.hasOtherOption}
           value={value}
           onChange={onChange}
@@ -67,7 +64,6 @@ const Question = ({ question, value, onChange, status }) => {
           id={question.id}
           title={question.title}
           description={question.helpText}
-          mandatory={question.isRequired}
           options={question.options}
           value={value}
           onChange={onChange}

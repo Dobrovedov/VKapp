@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 
 import {
   View,
@@ -33,14 +33,14 @@ const mockPoolList = [
         placeholder: "",
         title: "Name",
         id: 1633920210,
-        isRequired: false,
+        isRequired: true,
       },
       {
         type: "MULTIPLE_CHOICE",
         helpText: "",
         id: 1770822543,
         title: "How much do you like choices?",
-        isRequired: false,
+        isRequired: true,
         hasOtherOption: true,
         placeholder: "",
         options: ["I choose you!", "No, you!", "Never mind, you!"],
@@ -50,7 +50,7 @@ const mockPoolList = [
         helpText: "Description",
         id: 1846923513,
         title: "How much do you like checkboxes?",
-        isRequired: false,
+        isRequired: true,
         hasOtherOption: true,
         placeholder: "",
         options: ["Gorgeous", "Majestic", "Palatial", "Fancy"],
@@ -60,7 +60,7 @@ const mockPoolList = [
         helpText: "",
         id: 449887830,
         title: "How much do you like dropdowns?",
-        isRequired: false,
+        isRequired: true,
         placeholder: "",
         options: ["I love it <3", "So-so", "Nah, dispose of them"],
       },
@@ -69,35 +69,38 @@ const mockPoolList = [
 ]
 
 const validateTextarea = (value) => {
-  if (!value.text) {
+  if (!value || !value.text) {
     return "Заполните поле"
   }
 }
 
-const validateBox = (value) => {
-  console.log(value)
-  if (value.selectedAnswers && value.selectedAnswers.length === 0) {
+const validateCheckboxAndDropdown = (value) => {
+  if (!value || !value.selectedAnswers || value.selectedAnswers.length === 0) {
     return "Выберите хотя бы одно поле"
   }
 }
 
-const validateAnswer = (question, value) => {
-  let validationResult
+const validateRadiobox = (value) => {
+  if (!value || !value.selectedAnswer) {
+    console.log("yep")
+    return "Выберите хотя бы один ответ"
+  }
+}
 
-  switch (question.type) {
-    case "TEXTAREA":
-      validationResult = validateTextarea(value)
-      break
-    case "MULTIPLE_CHOICE":
-    case "CHECKBOX":
-    case "DROPDOWN":
-      validationResult = validateBox(value)
-      break
-    default:
-      break
+const validateAnswer = (type, value) => {
+  if (type === "TEXTAREA") {
+    return validateTextarea(value)
   }
 
-  return { [question.id]: validationResult }
+  if (type === "MULTIPLE_CHOICE") {
+    return validateRadiobox(value)
+  }
+
+  if (type === "CHECKBOX" || type === "DROPDOWN") {
+    return validateCheckboxAndDropdown(value)
+  }
+
+  return "Неизвестная ошибка"
 }
 
 const PoolPage = ({ location }) => {
@@ -109,7 +112,7 @@ const PoolPage = ({ location }) => {
   }
 
   const [activePanel, setActivePanel] = useState(0)
-  const [store, setStore] = useState({ errors: {}, answers: {} })
+  const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
 
   const totalQuestionsNumber = poolData.questions.length - 1
@@ -118,63 +121,63 @@ const PoolPage = ({ location }) => {
     <div>
       <View activePanel={activePanel}>
         {[
-          ...poolData.questions.map((question, index) => (
-            <Panel id={index}>
-              <PanelHeader>{poolData.title}</PanelHeader>
-              <div>
-                <Progress value={(activePanel / totalQuestionsNumber) * 100} />
-              </div>
-              <div>
-                {store.errors[question.id] &&
-                  seenQuestions.indexOf(question.id) !== -1 && (
-                    <FormLayout>
-                      <FormStatus state={"error"}>
-                        {store.errors[question.id]}
-                      </FormStatus>
-                    </FormLayout>
-                  )}
-              </div>
-              <Question
-                question={question}
-                value={store.answers[question.id]}
-                onChange={(value) => {
-                  setStore({
-                    errors: {
-                      ...store.errors,
-                      ...validateAnswer(question, value),
-                    },
-                    answers: {
-                      ...store.answers,
+          ...poolData.questions.map((question, index) => {
+            const error =
+              question.isRequired &&
+              validateAnswer(question.type, userAnswers[question.id])
+
+            const hasError = error && seenQuestions.indexOf(question.id) !== -1
+
+            return (
+              <Panel id={index}>
+                <PanelHeader>{poolData.title}</PanelHeader>
+                <div>
+                  <Progress
+                    value={(activePanel / totalQuestionsNumber) * 100}
+                  />
+                </div>
+                {hasError && (
+                  <FormLayout>
+                    <FormStatus state={"error"}>{error}</FormStatus>
+                  </FormLayout>
+                )}
+                <Question
+                  question={question}
+                  value={userAnswers[question.id]}
+                  onChange={(value) => {
+                    setUserAnswers({
+                      ...userAnswers,
                       [question.id]: value,
-                    },
-                  })
-                }}
-              />
-              <Div style={{ display: "flex" }}>
-                {activePanel > 0 && (
-                  <BackButton
-                    onClick={() => {
-                      setActivePanel(activePanel - 1)
-                    }}
-                  />
-                )}
-                {activePanel < totalQuestionsNumber ? (
-                  <NextButton
-                    onClick={() => {
-                      setSeenQuestions([...seenQuestions, question.id]) // remove duplicate ids
-                      setActivePanel(activePanel + 1)
-                    }}
-                  />
-                ) : (
-                  <SubmitButton
-                    onClick={() => {
-                      setActivePanel("confirmation")
-                    }}
-                  />
-                )}
-              </Div>
-            </Panel>
-          )),
+                    })
+                  }}
+                />
+                <Div style={{ display: "flex" }}>
+                  {activePanel > 0 && (
+                    <BackButton
+                      onClick={() => {
+                        setActivePanel(activePanel - 1)
+                      }}
+                    />
+                  )}
+                  {activePanel < totalQuestionsNumber ? (
+                    <NextButton
+                      disabled={hasError}
+                      onClick={() => {
+                        setSeenQuestions([...seenQuestions, question.id])
+                        setActivePanel(activePanel + 1)
+                      }}
+                    />
+                  ) : (
+                    <SubmitButton
+                      onClick={() => {
+                        setActivePanel("confirmation")
+                      }}
+                    />
+                  )}
+                </Div>
+              </Panel>
+            )
+          }),
           // Extract into separate component
           <Panel id="confirmation">
             <ThanksPanel confirmationMessage={poolData.confirmationMessage} />

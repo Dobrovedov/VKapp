@@ -43,7 +43,6 @@ RadioQuestion.defaultProps = {
     selectedAnotherOption: false,
     selectedAnswer: "",
   },
-  mandatory: false,
   hasAnotherOption: false,
 }
 
@@ -54,7 +53,6 @@ RadioQuestion.propTypes = {
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
-  mandatory: PropTypes.bool.isRequired,
   hasAnotherOption: PropTypes.bool,
 }
 

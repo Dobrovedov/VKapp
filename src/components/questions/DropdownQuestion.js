@@ -47,7 +47,6 @@ DropdownQuestion.propTypes = {
   description: PropTypes.string,
   placeholder: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.string),
-  mandatory: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
