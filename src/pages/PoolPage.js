@@ -4,16 +4,17 @@ import {
   View,
   Panel,
   PanelHeader,
-  Div,
+  FormLayout,
+  FormStatus,
   Progress,
   Spinner,
 } from "@vkontakte/vkui"
+import { validateAnswer } from "../utils/validators"
+
 import ErrorPage from "../pages/ErrorPage"
-import NextButton from "../components/NextButton"
-import SubmitButton from "../components/SubmitButton"
-import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
+import QuestionControls from "../components/QuestionControls/"
 
 import { getSurvey, sendAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
@@ -22,7 +23,8 @@ const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState(0)
-  const [userAnswers, setUserAnswers] = useState([])
+  const [userAnswers, setUserAnswers] = useState({})
+  const [seenQuestions, setSeenQuestions] = useState([])
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -57,40 +59,51 @@ const PoolPage = () => {
     <div>
       <View activePanel={activePanel}>
         {[
-          ...poolData.questions.map((question, index) => (
-            <Panel id={index}>
-              <PanelHeader>{poolData.meta.title}</PanelHeader>
-              <div>
+          ...poolData.questions.map((question, index) => {
+            const error =
+              question.required &&
+              validateAnswer(question.type, userAnswers[question.id])
+
+            const hasError = error && seenQuestions.indexOf(question.id) !== -1
+
+            return (
+              <Panel id={index}>
+                <PanelHeader>{poolData.title}</PanelHeader>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
-              </div>
-              <Question
-                question={question}
-                value={userAnswers[question.id]}
-                onChange={(value) => {
-                  setUserAnswers({
-                    ...userAnswers,
-                    [question.id]: { type: question.type, ...value },
-                  })
-                }}
-              />
-              {/* Extract into SurveyPageControls.js */}
-              <Div style={{ display: "flex" }}>
-                {activePanel > 0 && (
-                  <BackButton onClick={() => setActivePanel(activePanel - 1)} />
+                {hasError && (
+                  <FormLayout>
+                    <FormStatus state={"error"}>{error}</FormStatus>
+                  </FormLayout>
                 )}
-                {index < totalQuestionsNumber ? (
-                  <NextButton onClick={() => setActivePanel(activePanel + 1)} />
-                ) : (
-                  <SubmitButton
-                    onClick={() => {
-                      sendAnswers(prepareResponse(poolData.id, userAnswers))
-                      setActivePanel("confirmation")
-                    }}
-                  />
-                )}
-              </Div>
-            </Panel>
-          )),
+                <Question
+                  question={question}
+                  value={userAnswers[question.id]}
+                  onChange={(value) => {
+                    setUserAnswers({
+                      ...userAnswers,
+                      [question.id]: { type: question.type, ...value },
+                    })
+                  }}
+                />
+                <QuestionControls
+                  onBack={() => {
+                    setActivePanel(activePanel - 1)
+                  }}
+                  onNext={() => {
+                    setSeenQuestions([...seenQuestions, question.id])
+                    setActivePanel(activePanel + 1)
+                  }}
+                  onSubmit={() => {
+                    sendAnswers(prepareResponse(poolData.id, userAnswers))
+                    setActivePanel("confirmation")
+                  }}
+                  isNextButtonDisabled={!!error}
+                  isFirstQuestion={activePanel === 0}
+                  isLastQuestion={activePanel === totalQuestionsNumber}
+                />
+              </Panel>
+            )
+          }),
           // Extract into separate component
           <Panel id="confirmation">
             <ThanksPanel confirmationMessage="Спасибо за уделённое нам время!" />

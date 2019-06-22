@@ -1,11 +1,12 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Radio, Cell } from "@vkontakte/vkui"
+import { Radio, Cell, FormLayoutGroup } from "@vkontakte/vkui"
 
 const RadioQuestion = ({
   id,
   title,
+  description,
   options,
   value,
   onChange,
@@ -13,7 +14,7 @@ const RadioQuestion = ({
 }) => {
   return (
     <>
-      <Cell>{title}</Cell>
+      <Cell description={description}>{title}</Cell>
       {options.map((option) => (
         <Radio
           name={id}
@@ -26,6 +27,7 @@ const RadioQuestion = ({
       ))}
       {hasAnotherOption && (
         <Radio
+          style={{ color: "black!important" }}
           name={id}
           description={"Другое"}
           checked={value.selectedAnswer === "Другое"}
@@ -43,7 +45,6 @@ RadioQuestion.defaultProps = {
     selectedAnotherOption: false,
     selectedAnswer: "",
   },
-  mandatory: false,
   hasAnotherOption: false,
 }
 
@@ -54,7 +55,6 @@ RadioQuestion.propTypes = {
   placeholder: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
-  mandatory: PropTypes.bool.isRequired,
   hasAnotherOption: PropTypes.bool,
 }
 

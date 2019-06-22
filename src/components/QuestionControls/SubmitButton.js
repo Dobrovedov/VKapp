@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import { Button } from "@vkontakte/vkui"
 
-const SubmitButton = ({ onClick }) => {
+const SubmitButton = ({ onClick, disabled }) => {
   return (
     <Button
       size="l"
@@ -19,8 +19,13 @@ const SubmitButton = ({ onClick }) => {
   )
 }
 
+SubmitButton.defaultProps = {
+  disabled: false,
+}
+
 SubmitButton.propTypes = {
   onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 }
 
 export default SubmitButton
