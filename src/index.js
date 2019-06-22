@@ -22,4 +22,5 @@ connect.subscribe((e) => {
 
 // Init VK App
 connect.send("VKWebAppInit", {})
+connect.send("VKWebAppGetUserInfo")
 ReactDOM.render(<App />, document.getElementById("root"))
