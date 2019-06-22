@@ -1,5 +1,4 @@
 import React from "react"
-import "../components/ErrorPic.css"
 import PropTypes from "prop-types"
 
 const randomPic = () => {
@@ -9,7 +8,19 @@ const randomPic = () => {
 }
 
 const ErrorPic = ({ alt }) => {
-  return <img class="Error" src={randomPic()} alt={alt} />
+  return (
+    <img
+      class="Error"
+      style={{
+        display: "block",
+        width: "50%",
+        maxWidth: "240px",
+        margin: "20px auto",
+      }}
+      src={randomPic()}
+      alt={alt}
+    />
+  )
 }
 
 ErrorPic.propTypes = {
