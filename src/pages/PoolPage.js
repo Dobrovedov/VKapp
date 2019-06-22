@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import {
   View,
@@ -16,8 +16,16 @@ import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import QuestionControls from "../components/QuestionControls/"
 
-import { getSurvey, sendAnswers } from "../api"
+import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
+
+const usePrevious = (value) => {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
+}
 
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
@@ -27,6 +35,8 @@ const PoolPage = () => {
   const [seenQuestions, setSeenQuestions] = useState([])
 
   const [isLoading, setIsLoading] = useState(true)
+
+  const prevUserAnswer = usePrevious(userAnswers)
 
   console.log(userAnswers)
 
@@ -87,10 +97,28 @@ const PoolPage = () => {
                 />
                 <QuestionControls
                   onBack={() => {
+                    if (
+                      prevUserAnswer[question.id] !== userAnswers[question.id]
+                    ) {
+                      sendChangedAnswers(
+                        poolId,
+                        poolData.id,
+                        prepareResponse(poolData.id, userAnswers),
+                      )
+                    }
                     setActivePanel(activePanel - 1)
                   }}
                   onNext={() => {
                     setSeenQuestions([...seenQuestions, question.id])
+                    if (
+                      prevUserAnswer[question.id] !== userAnswers[question.id]
+                    ) {
+                      sendChangedAnswers(
+                        poolId,
+                        poolData.id,
+                        prepareResponse(poolData.id, userAnswers),
+                      )
+                    }
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
