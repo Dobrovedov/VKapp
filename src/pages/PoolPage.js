@@ -33,6 +33,7 @@ const PoolPage = () => {
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
+  const [wasFirstResponse, setFirstResponse] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -47,6 +48,30 @@ const PoolPage = () => {
       setIsLoading(false)
     })
   }, [poolId])
+
+  const sendRequestByNext = (question) => {
+    if (prevUserAnswer[question.id] !== userAnswers[question.id]) {
+      if (!wasFirstResponse) {
+        sendAnswers(poolData.id, prepareResponse(poolData.id, userAnswers))
+        setFirstResponse(true)
+      } else {
+        sendChangedAnswers(
+          poolId,
+          poolData.id,
+          prepareResponse(poolData.id, userAnswers),
+        )
+      }
+    }
+  }
+  const sendRequestByBack = (question) => {
+    if (prevUserAnswer[question.id] !== userAnswers[question.id]) {
+      sendChangedAnswers(
+        poolId,
+        poolData.id,
+        prepareResponse(poolData.id, userAnswers),
+      )
+    }
+  }
 
   // Make loading Page or Spinner
   if (isLoading) {
@@ -97,35 +122,16 @@ const PoolPage = () => {
                 />
                 <QuestionControls
                   onBack={() => {
-                    if (
-                      prevUserAnswer[question.id] !== userAnswers[question.id]
-                    ) {
-                      sendChangedAnswers(
-                        poolId,
-                        poolData.id,
-                        prepareResponse(poolData.id, userAnswers),
-                      )
-                    }
+                    sendRequestByBack(question)
                     setActivePanel(activePanel - 1)
                   }}
                   onNext={() => {
                     setSeenQuestions([...seenQuestions, question.id])
-                    if (
-                      prevUserAnswer[question.id] !== userAnswers[question.id]
-                    ) {
-                      sendChangedAnswers(
-                        poolId,
-                        poolData.id,
-                        prepareResponse(poolData.id, userAnswers),
-                      )
-                    }
+                    sendRequestByNext(question)
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
-                    sendAnswers(
-                      poolData.id,
-                      prepareResponse(poolData.id, userAnswers),
-                    )
+                    sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
                   isNextButtonDisabled={!!error}
