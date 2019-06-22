@@ -13,3 +13,12 @@ export const sendAnswers = (id, response) =>
       mode: "no-cors",
     },
   )
+
+export const sendChangedAnswers = (surveyId, responseId, response) =>
+  axios.put(
+    `https://foodtechmoneymaker.herokuapp.com/surveys/${surveyId}/responses/${responseId}`,
+    response,
+    {
+      mode: "no-cors",
+    },
+  )

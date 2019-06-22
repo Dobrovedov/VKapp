@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import {
   View,
@@ -16,7 +16,9 @@ import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import QuestionControls from "../components/QuestionControls/"
 
-import { getSurvey, sendAnswers } from "../api"
+import usePrevious from "../hooks/usePrevious"
+
+import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
 
 const PoolPage = () => {
@@ -25,10 +27,11 @@ const PoolPage = () => {
   const [activePanel, setActivePanel] = useState(0)
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
+  const [responseId, setResponseId] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
 
-  console.log(userAnswers)
+  const prevUserAnswer = usePrevious(userAnswers)
 
   // Data Retrieval
   useEffect(() => {
@@ -37,6 +40,48 @@ const PoolPage = () => {
       setIsLoading(false)
     })
   }, [poolId])
+
+  const sendRequestByNext = (question) => {
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
+    }
+
+    // Generate new response
+    // If no was provided before
+    if (!responseId) {
+      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
+        (response) => {
+          setResponseId(response.data.id)
+        },
+      )
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
+  }
+  const sendRequestByBack = (question) => {
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
+    }
+
+    if (!responseId) {
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
+  }
 
   // Make loading Page or Spinner
   if (isLoading) {
@@ -87,17 +132,16 @@ const PoolPage = () => {
                 />
                 <QuestionControls
                   onBack={() => {
+                    sendRequestByBack(question)
                     setActivePanel(activePanel - 1)
                   }}
                   onNext={() => {
                     setSeenQuestions([...seenQuestions, question.id])
+                    sendRequestByNext(question)
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
-                    sendAnswers(
-                      poolData.id,
-                      prepareResponse(poolData.id, userAnswers),
-                    )
+                    sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
                   isNextButtonDisabled={!!error}
