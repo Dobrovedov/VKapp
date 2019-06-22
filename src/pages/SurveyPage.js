@@ -19,7 +19,7 @@ import QuestionControls from "../components/QuestionControls/"
 import { getSurvey, sendAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
 
-const PoolPage = () => {
+const SurveyPage = ({ user }) => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState(0)
@@ -27,8 +27,7 @@ const PoolPage = () => {
   const [seenQuestions, setSeenQuestions] = useState([])
 
   const [isLoading, setIsLoading] = useState(true)
-
-  console.log(userAnswers)
+  console.log(user)
 
   // Data Retrieval
   useEffect(() => {
@@ -117,4 +116,4 @@ const PoolPage = () => {
   )
 }
 
-export default PoolPage
+export default SurveyPage
