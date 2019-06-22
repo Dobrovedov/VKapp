@@ -55,7 +55,8 @@ const PoolPage = () => {
       if (!wasFirstResponse) {
         sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
           (response) => {
-            setResponseId(response.id)
+            setResponseId(response.data.id)
+            console.log(response.data.id)
           },
         )
         setFirstResponse(true)
