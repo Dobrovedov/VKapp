@@ -27,6 +27,7 @@ const RadioQuestion = ({
       ))}
       {hasAnotherOption && (
         <Radio
+          style={{ color: "black!important" }}
           name={id}
           description={"Другое"}
           checked={value.selectedAnswer === "Другое"}

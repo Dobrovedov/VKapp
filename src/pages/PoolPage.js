@@ -55,7 +55,7 @@ const PoolPage = () => {
         {[
           ...poolData.questions.map((question, index) => {
             const error =
-              question.isRequired &&
+              question.required &&
               validateAnswer(question.type, userAnswers[question.id])
 
             const hasError = error && seenQuestions.indexOf(question.id) !== -1
