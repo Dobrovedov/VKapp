@@ -157,7 +157,7 @@ const PoolPage = ({ location }) => {
                   }}
                   isNextButtonDisabled={hasError}
                   isFirstQuestion={activePanel === 0}
-                  isLastQuestion={activePanel < totalQuestionsNumber}
+                  isLastQuestion={activePanel === totalQuestionsNumber}
                 />
               </Panel>
             )

@@ -18,7 +18,7 @@ const QuestionControls = ({
   return (
     <Div style={{ display: "flex" }}>
       {!isFirstQuestion && <BackButton onClick={onBack} />}
-      {isLastQuestion ? (
+      {!isLastQuestion ? (
         <NextButton onClick={onNext} disabled={isNextButtonDisabled} />
       ) : (
         <SubmitButton onClick={onSubmit} />
