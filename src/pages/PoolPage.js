@@ -68,7 +68,7 @@ const PoolPage = () => {
 
             return (
               <Panel id={index}>
-                <PanelHeader>{poolData.title}</PanelHeader>
+                <PanelHeader>{poolData.meta.title}</PanelHeader>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
                 {hasError && (
                   <FormLayout>
