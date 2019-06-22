@@ -74,7 +74,7 @@ const PoolPage = ({ location }) => {
                   onSubmit={() => {
                     setActivePanel("confirmation")
                   }}
-                  isNextButtonDisabled={hasError}
+                  isNextButtonDisabled={!!error}
                   isFirstQuestion={activePanel === 0}
                   isLastQuestion={activePanel === totalQuestionsNumber}
                 />

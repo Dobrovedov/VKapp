@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Select, Cell } from "@vkontakte/vkui"
+import { Select, Cell, FormLayoutGroup } from "@vkontakte/vkui"
 
 const DropdownQuestion = ({
   id,
@@ -15,8 +15,7 @@ const DropdownQuestion = ({
   console.log(value.selectedAnswer)
   return (
     <>
-      <Cell>{title}</Cell>
-      <Cell>{description}</Cell>
+      <Cell description={description}>{title}</Cell>
       <Select
         id={id}
         placeholder={placeholder}

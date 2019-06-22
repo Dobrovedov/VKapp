@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Checkbox, Cell } from "@vkontakte/vkui"
+import { Checkbox, Cell, FormLayoutGroup } from "@vkontakte/vkui"
 
 const CheckboxQuestion = ({
   id,
@@ -25,7 +25,7 @@ const CheckboxQuestion = ({
 
   return (
     <>
-      <Cell>{title}</Cell>
+      <Cell description={description}>{title}</Cell>
       {options.map((option) => (
         <Checkbox
           value={option}

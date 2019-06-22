@@ -11,7 +11,7 @@ const mockPoolList = [
     questions: [
       {
         type: "TEXTAREA",
-        helpText: "Little description",
+        helpText: "Description for textarea",
         placeholder: "",
         title: "Name",
         id: 1633920210,
@@ -19,7 +19,7 @@ const mockPoolList = [
       },
       {
         type: "MULTIPLE_CHOICE",
-        helpText: "",
+        helpText: "Description for radioboxes",
         id: 1770822543,
         title: "How much do you like choices?",
         isRequired: true,
@@ -29,7 +29,7 @@ const mockPoolList = [
       },
       {
         type: "CHECKBOX",
-        helpText: "Description",
+        helpText: "Description for radio",
         id: 1846923513,
         title: "How much do you like checkboxes?",
         isRequired: true,
@@ -39,7 +39,7 @@ const mockPoolList = [
       },
       {
         type: "DROPDOWN",
-        helpText: "",
+        helpText: "Description for dropdown",
         id: 449887830,
         title: "How much do you like dropdowns?",
         isRequired: true,

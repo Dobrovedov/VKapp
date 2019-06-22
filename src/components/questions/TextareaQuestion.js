@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Cell, Input } from "@vkontakte/vkui"
+import { Cell, Input, FormLayoutGroup } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
 const TextareaQuestion = ({
@@ -14,8 +14,7 @@ const TextareaQuestion = ({
 }) => {
   return (
     <>
-      <Cell>{title}</Cell>
-      <Cell>{description}</Cell>
+      <Cell description={description}>{title}</Cell>
       <Input
         type="text"
         name={id}
