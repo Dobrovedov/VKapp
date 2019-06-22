@@ -34,6 +34,7 @@ const PoolPage = () => {
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
   const [wasFirstResponse, setFirstResponse] = useState(false)
+  const [responseId, setResponseId] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -52,22 +53,29 @@ const PoolPage = () => {
   const sendRequestByNext = (question) => {
     if (prevUserAnswer[question.id] !== userAnswers[question.id]) {
       if (!wasFirstResponse) {
-        sendAnswers(poolData.id, prepareResponse(poolData.id, userAnswers))
+        sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
+          (response) => {
+            setResponseId(response.id)
+          },
+        )
         setFirstResponse(true)
-      } else {
+      } else if (responseId != null) {
         sendChangedAnswers(
           poolId,
-          poolData.id,
+          responseId,
           prepareResponse(poolData.id, userAnswers),
         )
       }
     }
   }
   const sendRequestByBack = (question) => {
-    if (prevUserAnswer[question.id] !== userAnswers[question.id]) {
+    if (
+      responseId != null &&
+      prevUserAnswer[question.id] !== userAnswers[question.id]
+    ) {
       sendChangedAnswers(
         poolId,
-        poolData.id,
+        responseId,
         prepareResponse(poolData.id, userAnswers),
       )
     }
