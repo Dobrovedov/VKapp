@@ -16,9 +16,13 @@ connect.subscribe((e) => {
         : "client_light"
       document.body.attributes.setNamedItem(schemeAttribute)
       break
+    case "VKWebAppGetUserInfo":
+      console.log(e)
     default:
   }
 })
+
+connect.send("VKWebAppGetUserInfo", {})
 
 // Init VK App
 connect.send("VKWebAppInit", {})
