@@ -10,11 +10,9 @@ import {
   Progress,
 } from "@vkontakte/vkui"
 import ErrorPage from "../pages/ErrorPage"
-import NextButton from "../components/NextButton"
-import SubmitButton from "../components/SubmitButton"
-import BackButton from "../components/BackButton"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
+import QuestionControls from "../components/QuestionControls"
 
 const mockPoolList = [
   {
@@ -130,11 +128,7 @@ const PoolPage = ({ location }) => {
             return (
               <Panel id={index}>
                 <PanelHeader>{poolData.title}</PanelHeader>
-                <div>
-                  <Progress
-                    value={(activePanel / totalQuestionsNumber) * 100}
-                  />
-                </div>
+                <Progress value={(activePanel / totalQuestionsNumber) * 100} />
                 {hasError && (
                   <FormLayout>
                     <FormStatus state={"error"}>{error}</FormStatus>
@@ -150,30 +144,21 @@ const PoolPage = ({ location }) => {
                     })
                   }}
                 />
-                <Div style={{ display: "flex" }}>
-                  {activePanel > 0 && (
-                    <BackButton
-                      onClick={() => {
-                        setActivePanel(activePanel - 1)
-                      }}
-                    />
-                  )}
-                  {activePanel < totalQuestionsNumber ? (
-                    <NextButton
-                      disabled={hasError}
-                      onClick={() => {
-                        setSeenQuestions([...seenQuestions, question.id])
-                        setActivePanel(activePanel + 1)
-                      }}
-                    />
-                  ) : (
-                    <SubmitButton
-                      onClick={() => {
-                        setActivePanel("confirmation")
-                      }}
-                    />
-                  )}
-                </Div>
+                <QuestionControls
+                  onBack={() => {
+                    setActivePanel(activePanel - 1)
+                  }}
+                  onNext={() => {
+                    setSeenQuestions([...seenQuestions, question.id])
+                    setActivePanel(activePanel + 1)
+                  }}
+                  onSubmit={() => {
+                    setActivePanel("confirmation")
+                  }}
+                  isNextButtonDisabled={hasError}
+                  isFirstQuestion={activePanel === 0}
+                  isLastQuestion={activePanel < totalQuestionsNumber}
+                />
               </Panel>
             )
           }),
