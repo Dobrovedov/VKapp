@@ -38,7 +38,13 @@ const PoolPage = () => {
 
   // Make loading Page or Spinner
   if (isLoading) {
-    return <Spinner size="large" />
+    return (
+      <View activePanel="spinner">
+        <Panel id="spinner">
+          <Spinner size="large" style={{ marginTop: "50%" }} />
+        </Panel>
+      </View>
+    )
   }
 
   if (!poolData || !poolId) {
@@ -87,9 +93,7 @@ const PoolPage = () => {
           )),
           // Extract into separate component
           <Panel id="confirmation">
-            <ThanksPanel
-              confirmationMessage={poolData.meta.confirmationMessage}
-            />
+            <ThanksPanel confirmationMessage="Спасибо за уделённое нам время!" />
           </Panel>,
         ]}
       </View>
