@@ -20,28 +20,21 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
         color: "white",
       }}
     >
-      <Div style={{ fontSize: "1.5em" }}>
+      <Div style={{ fontSize: "1.5em", marginBottom: 20 }}>
         {title}
         {company && <Div style={{ fontSize: "0.4em" }}>by {company}</Div>}
       </Div>
       <Div
         style={{
-          fontSize: "1em",
-          height: "300px",
+          fontSize: "0.8em",
+          maxHeight: "300px",
           marginBottom: 20,
           overflow: "auto",
         }}
       >
         {description}
       </Div>
-      <Div
-        style={{
-          position: "absolute",
-          bottom: 60,
-          left: 30,
-          right: 30,
-        }}
-      >
+      <Div>
         <Button
           size="l"
           style={{
