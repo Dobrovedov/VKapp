@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Cell, Input, FormLayoutGroup } from "@vkontakte/vkui"
+import { Cell, Input } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
 const TextareaQuestion = ({

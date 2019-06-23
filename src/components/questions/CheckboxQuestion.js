@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Checkbox, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Checkbox, Cell } from "@vkontakte/vkui"
 
 const CheckboxQuestion = ({
   id,
@@ -16,6 +16,10 @@ const CheckboxQuestion = ({
   const isAnotherOptionChecked = chosenAnswers.some(
     (answer) => answer === "Другое",
   )
+
+  // Do not change dependency array
+  // Until reason on infinite re-render
+  // Will be discovered
   useEffect(() => {
     onChange({
       selectedAnotherOption: isAnotherOptionChecked,

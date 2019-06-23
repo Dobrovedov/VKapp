@@ -22,6 +22,7 @@ const ThanksPanel = ({ confirmationMessage }) => {
           maxWidth: "240px",
           margin: "20px auto",
         }}
+        alt="Sticker"
       />
       <p>{confirmationMessage}</p>
     </Div>
