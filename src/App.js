@@ -6,6 +6,7 @@ import mockConnect from "@vkontakte/vkui-connect-mock"
 
 import AskPrivacy from "./pages/AskPrivacy"
 
+// Mocking connect
 let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect
 
 const App = () => {

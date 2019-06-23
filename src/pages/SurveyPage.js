@@ -17,7 +17,8 @@ import ThanksPanel from "../components/ThanksPanel"
 import QuestionControls from "../components/QuestionControls/"
 
 import { getSurvey, sendAnswers } from "../api"
-import prepareResponse from "../prepareResponse"
+import prepareResponse from "../utils/prepareResponse"
+import prepareUser from "../utils/prepareUser"
 
 const SurveyPage = ({ user }) => {
   const poolId = window.location.hash.slice(1)
@@ -96,6 +97,7 @@ const SurveyPage = ({ user }) => {
                     sendAnswers(
                       poolData.id,
                       prepareResponse(poolData.id, userAnswers),
+                      prepareUser(user),
                     )
                     setActivePanel("confirmation")
                   }}
