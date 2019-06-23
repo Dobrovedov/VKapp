@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Select, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Select, Cell } from "@vkontakte/vkui"
 
 const DropdownQuestion = ({
   id,
@@ -12,7 +12,13 @@ const DropdownQuestion = ({
   value,
   onChange,
 }) => {
-  console.log(value.selectedAnswer)
+  // Initialize with starting value
+  if (!value.selectedAnswer) {
+    onChange({
+      selectedAnswer: options[0],
+    })
+  }
+
   return (
     <>
       <Cell description={description} multiline>

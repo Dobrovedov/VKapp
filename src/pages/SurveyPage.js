@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 
 import {
   View,
@@ -9,6 +9,8 @@ import {
   Progress,
   Spinner,
 } from "@vkontakte/vkui"
+
+import prepareResponse from "../utils/prepareResponse"
 import { validateAnswer } from "../utils/validators"
 
 import ErrorPage from "./ErrorPage"
@@ -20,9 +22,8 @@ import QuestionControls from "../components/QuestionControls"
 import usePrevious from "../hooks/usePrevious"
 
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
-import prepareResponse from "../prepareResponse"
 
-const PoolPage = () => {
+const SurveyPage = () => {
   const surveyId = window.location.hash.slice(1)
   const [surveyData, setSurveyData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
@@ -169,4 +170,4 @@ const PoolPage = () => {
   )
 }
 
-export default PoolPage
+export default SurveyPage
