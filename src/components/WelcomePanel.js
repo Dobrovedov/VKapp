@@ -40,6 +40,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
           style={{
             background: "none",
             border: "2px solid white",
+            color: "white",
           }}
           stretched
           onClick={onClick}
