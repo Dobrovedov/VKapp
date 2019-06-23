@@ -1,4 +1,4 @@
-const validateTextarea = (value) => {
+const validateTextAndTextarea = (value) => {
   if (!value || !value.text) {
     return "Заполните поле"
   }
@@ -17,8 +17,8 @@ const validateRadiobox = (value) => {
 }
 
 export const validateAnswer = (type, value) => {
-  if (type === "TEXTAREA") {
-    return validateTextarea(value)
+  if (type === "TEXTAREA" || type === "TEXT") {
+    return validateTextAndTextarea(value)
   }
 
   if (type === "MULTIPLE_CHOICE") {

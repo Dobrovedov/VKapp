@@ -6,6 +6,7 @@ import { FormLayout } from "@vkontakte/vkui"
 import RadioQuestion from "./RadioQuestion"
 import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
+import TextQuestion from "./TextQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
 const Question = ({ question, value, onChange, status }) => {
@@ -13,6 +14,21 @@ const Question = ({ question, value, onChange, status }) => {
     return (
       <FormLayout>
         <TextareaQuestion
+          id={question.id}
+          title={question.title}
+          description={question.helpText}
+          placeholder={question.placeholder}
+          value={value}
+          onChange={onChange}
+        />
+      </FormLayout>
+    )
+  }
+
+  if (question.type === "TEXT") {
+    return (
+      <FormLayout>
+        <TextQuestion
           id={question.id}
           title={question.title}
           description={question.helpText}
@@ -80,6 +96,7 @@ Question.propTypes = {
   status: PropTypes.oneOf(["valid", "error"]),
   question: PropTypes.shape({
     type: PropTypes.oneOf([
+      "TEXT",
       "TEXTAREA",
       "MULTIPLE_CHOICE",
       "CHECKBOX",
