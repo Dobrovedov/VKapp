@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Div, Group, Button } from "@vkontakte/vkui"
+import { Div, Button } from "@vkontakte/vkui"
 
 const WelcomePanel = ({ title, company, description, onClick }) => {
   return (
@@ -12,7 +12,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
         right: 0,
         left: 0,
         bottom: 0,
-        paddingTop: 60,
+        paddingTop: 80,
         paddingRight: 30,
         paddingLeft: 30,
         paddingBottom: 60,
@@ -37,7 +37,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
       <Div
         style={{
           position: "absolute",
-          bottom: 30,
+          bottom: 60,
           left: 30,
           right: 30,
         }}
