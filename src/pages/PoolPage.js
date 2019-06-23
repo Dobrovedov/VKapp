@@ -105,7 +105,7 @@ const PoolPage = () => {
     <div>
       <View activePanel={activePanel}>
         {[
-          <Panel id="Welcome" className="WelcomePage">
+          <Panel id="Welcome">
             <WelcomePanel
               onClick={() => {
                 setActivePanel(0)

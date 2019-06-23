@@ -7,10 +7,11 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
     <Div
       className="WelcomePage"
       style={{
-        position: "absolute",
+        position: "fixed",
         top: 0,
         right: 0,
         left: 0,
+        bottom: 0,
         paddingTop: 60,
         paddingRight: 30,
         paddingLeft: 30,
@@ -26,95 +27,21 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
       <Div
         style={{
           fontSize: "1em",
-          height: "70vh",
+          height: "300px",
           marginBottom: 20,
           overflow: "auto",
         }}
       >
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid
-        consequuntur cum dolore doloribus, eligendi, enim et fugit id ipsa
-        laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aliquid consequuntur cum dolore doloribus, eligendi, enim et fugit id
-        ipsa laboriosam magni modi nobis non nulla, officiis quam quia saepe
-        temporibus?
+        {description}
       </Div>
-      <Div>
+      <Div
+        style={{
+          position: "absolute",
+          bottom: 30,
+          left: 30,
+          right: 30,
+        }}
+      >
         <Button
           size="l"
           style={{
