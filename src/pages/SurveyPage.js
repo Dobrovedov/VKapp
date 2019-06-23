@@ -11,11 +11,11 @@ import {
 } from "@vkontakte/vkui"
 import { validateAnswer } from "../utils/validators"
 
-import ErrorPage from "../pages/ErrorPage"
+import ErrorPage from "./ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import WelcomePanel from "../components/WelcomePanel"
-import QuestionControls from "../components/QuestionControls/"
+import QuestionControls from "../components/QuestionControls"
 
 import usePrevious from "../hooks/usePrevious"
 
@@ -23,8 +23,8 @@ import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../prepareResponse"
 
 const PoolPage = () => {
-  const poolId = window.location.hash.slice(1)
-  const [poolData, setPoolData] = useState({})
+  const surveyId = window.location.hash.slice(1)
+  const [surveyData, setSurveyData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
@@ -36,11 +36,11 @@ const PoolPage = () => {
 
   // Data Retrieval
   useEffect(() => {
-    getSurvey(poolId).then((res) => {
-      setPoolData(res.data)
+    getSurvey(surveyId).then((res) => {
+      setSurveyData(res.data)
       setIsLoading(false)
     })
-  }, [poolId])
+  }, [surveyId])
 
   const sendRequestByNext = (question) => {
     // Skip if no changes happened
@@ -51,7 +51,7 @@ const PoolPage = () => {
     // Generate new response
     // If no was provided before
     if (!responseId) {
-      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
+      sendAnswers(surveyId, prepareResponse(surveyId, userAnswers)).then(
         (response) => {
           setResponseId(response.data.id)
         },
@@ -61,9 +61,9 @@ const PoolPage = () => {
 
     // Update response with new values
     sendChangedAnswers(
-      poolId,
+      surveyId,
       responseId,
-      prepareResponse(poolData.id, userAnswers),
+      prepareResponse(surveyData.id, userAnswers),
     )
   }
   const sendRequestByBack = (question) => {
@@ -78,13 +78,12 @@ const PoolPage = () => {
 
     // Update response with new values
     sendChangedAnswers(
-      poolId,
+      surveyId,
       responseId,
-      prepareResponse(poolData.id, userAnswers),
+      prepareResponse(surveyData.id, userAnswers),
     )
   }
 
-  // Make loading Page or Spinner
   if (isLoading) {
     return (
       <View activePanel="spinner">
@@ -95,26 +94,26 @@ const PoolPage = () => {
     )
   }
 
-  if (!poolData || !poolId) {
+  if (!surveyData || !surveyId) {
     return <ErrorPage />
   }
 
-  const totalQuestionsNumber = poolData.questions.length - 1
+  const totalQuestionsNumber = surveyData.questions.length - 1
 
   return (
     <div>
       <View activePanel={activePanel}>
         {[
-          <Panel id="Welcome">
+          <Panel id="Welcome" style={{ padding: 0 }}>
             <WelcomePanel
               onClick={() => {
                 setActivePanel(0)
               }}
-              title={poolData.meta.title}
-              description={poolData.meta.description}
+              title={surveyData.meta.title}
+              description={surveyData.meta.description}
             />
           </Panel>,
-          ...poolData.questions.map((question, index) => {
+          ...surveyData.questions.map((question, index) => {
             const error =
               question.required &&
               validateAnswer(question.type, userAnswers[question.id])
@@ -123,7 +122,7 @@ const PoolPage = () => {
 
             return (
               <Panel id={index}>
-                <PanelHeader>{poolData.meta.title}</PanelHeader>
+                <PanelHeader>{surveyData.meta.title}</PanelHeader>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
                 {hasError && (
                   <FormLayout>
@@ -161,7 +160,6 @@ const PoolPage = () => {
               </Panel>
             )
           }),
-          // Extract into separate component
           <Panel id="confirmation">
             <ThanksPanel confirmationMessage="Спасибо за уделённое нам время!" />
           </Panel>,

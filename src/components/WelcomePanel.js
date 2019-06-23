@@ -4,8 +4,15 @@ import PropTypes from "prop-types"
 
 const WelcomePanel = ({ title, description, onClick }) => {
   return (
-    <Div style={{ minHeight: "100vw", display: "flex", alignItems: "center" }}>
-      <Alert>
+    <Div
+      style={{
+        minHeight: "90vh",
+        display: "flex",
+        alignItems: "center",
+        padding: 0,
+      }}
+    >
+      <Alert onClose={() => console.log()}>
         <h2>{title}</h2>
         <p>{description}</p>
         <Div style={{ display: "flex" }}>
