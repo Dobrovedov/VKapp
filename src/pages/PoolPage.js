@@ -8,6 +8,7 @@ import {
   FormStatus,
   Progress,
   Spinner,
+  Div,
 } from "@vkontakte/vkui"
 import { validateAnswer } from "../utils/validators"
 
@@ -106,6 +107,20 @@ const PoolPage = () => {
       <View activePanel={activePanel}>
         {[
           <Panel id="Welcome">
+            {/*<PanelHeader>{poolData.meta.title}</PanelHeader>*/}
+            <Div style={{ overflow: "hidden" }}>
+              <img
+                src="../img/background/back.jpg"
+                style={{
+                  objectFit: "cover",
+                  width: "100vw",
+                  height: "100vh",
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            </Div>
             <WelcomePanel
               onClick={() => {
                 setActivePanel(0)
