@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Panel, Div } from "@vkontakte/vkui"
-import ErrorPic from "../components/ErrorPic"
+import RandomErrorSticker from "../components/RandomErrorSticker"
 
 const ErrorPage = () => {
   return (
@@ -15,7 +15,7 @@ const ErrorPage = () => {
           }}
         >
           <h2>404 Страница не найдена</h2>
-          <ErrorPic alt={"whoops"} />
+          <RandomErrorSticker alt={"whoops"} />
           <p>Данный опрос уже закрыт или ещё не создан</p>
         </Div>
       </Panel>

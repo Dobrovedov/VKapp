@@ -7,7 +7,7 @@ const randomPic = () => {
   return "../img/errorPics/" + rand + ".png"
 }
 
-const ErrorPic = ({ alt }) => {
+const RandomErrorSticker = ({ alt }) => {
   return (
     <img
       class="Error"
@@ -23,8 +23,8 @@ const ErrorPic = ({ alt }) => {
   )
 }
 
-ErrorPic.propTypes = {
+RandomErrorSticker.propTypes = {
   alt: PropTypes.string.isRequired,
 }
 
-export default ErrorPic
+export default RandomErrorSticker
