@@ -8,7 +8,9 @@ import {
   FormStatus,
   Progress,
   Spinner,
+  HeaderButton,
 } from "@vkontakte/vkui"
+import Icon24Globe from "@vkontakte/icons/dist/24/globe"
 import { validateAnswer } from "../utils/validators"
 
 import ErrorPage from "../pages/ErrorPage"
@@ -16,10 +18,12 @@ import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import WelcomePanel from "../components/WelcomePanel"
 import QuestionControls from "../components/QuestionControls/"
+import LanguagePanel from "../components/LanguagePanel"
 
 import usePrevious from "../hooks/usePrevious"
 
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
+import { translateData } from "../translator.js"
 import prepareResponse from "../prepareResponse"
 
 const PoolPage = () => {
@@ -29,6 +33,8 @@ const PoolPage = () => {
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
   const [responseId, setResponseId] = useState(null)
+  const [prevPanel, setPrevPanel] = useState("Welcome")
+  const [language, setLanguage] = useState(navigator.language)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -37,6 +43,7 @@ const PoolPage = () => {
   // Data Retrieval
   useEffect(() => {
     getSurvey(poolId).then((res) => {
+      translateData(res.data, language)
       setPoolData(res.data)
       setIsLoading(false)
     })
@@ -123,7 +130,20 @@ const PoolPage = () => {
 
             return (
               <Panel id={index}>
-                <PanelHeader>{poolData.meta.title}</PanelHeader>
+                <PanelHeader
+                  left={
+                    <HeaderButton
+                      onClick={() => {
+                        setPrevPanel(JSON.parse(JSON.stringify(activePanel)))
+                        setActivePanel("languages")
+                      }}
+                    >
+                      <Icon24Globe />
+                    </HeaderButton>
+                  }
+                >
+                  {poolData.meta.title}
+                </PanelHeader>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
                 {hasError && (
                   <FormLayout>
@@ -164,6 +184,16 @@ const PoolPage = () => {
           // Extract into separate component
           <Panel id="confirmation">
             <ThanksPanel confirmationMessage="Спасибо за уделённое нам время!" />
+          </Panel>,
+          <Panel id="languages">
+            <PanelHeader>Выбор страны</PanelHeader>
+            <LanguagePanel
+              language={language}
+              setActivePanel={setActivePanel}
+              setLanguage={setLanguage}
+              prevPanel={prevPanel}
+              questionTranslation={(lang) => translateData(poolData, lang)}
+            />
           </Panel>,
         ]}
       </View>

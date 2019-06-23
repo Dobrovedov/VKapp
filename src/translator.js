@@ -19,19 +19,25 @@ export const getTranslation = (text, lang) =>
   )
 
 const translateTitle = (data, lang) =>
-  getTranslation(data.meta.title, lang).then((res) => {
-    data.meta.title = res.data.text[0]
-  })
+  data.meta.title !== ""
+    ? getTranslation(data.meta.title, lang).then((res) => {
+        data.meta.title = res.data.text[0]
+      })
+    : null
 
 const translateDescription = (data, lang) =>
-  getTranslation(data.meta.description, lang).then((res) => {
-    data.meta.description = res.data.text[0]
-  })
+  data.meta.description !== ""
+    ? getTranslation(data.meta.description, lang).then((res) => {
+        data.meta.description = res.data.text[0]
+      })
+    : null
 
 const translateConfirmationMessage = (data, lang) =>
-  getTranslation(data.meta.confirmationMessage, lang).then((res) => {
-    data.meta.confirmationMessage = res.data.text[0]
-  })
+  data.meta.confirmationMessage !== ""
+    ? getTranslation(data.meta.confirmationMessage, lang).then((res) => {
+        data.meta.confirmationMessage = res.data.text[0]
+      })
+    : null
 
 const translateQuestions = (data, lang) => {
   for (let i in data.questions) {
@@ -49,23 +55,31 @@ const translateOptions = (data, index, lang) => {
 }
 
 const translateQuestionTitle = (data, index, lang) =>
-  getTranslation(data.questions[index].title, lang).then((res) => {
-    data.questions[index].title = res.data.text[0]
-  })
+  data.questions[index].title !== ""
+    ? getTranslation(data.questions[index].title, lang).then((res) => {
+        data.questions[index].title = res.data.text[0]
+      })
+    : null
 
 const translateQuestionHelpText = (data, index, lang) =>
-  getTranslation(data.questions[index].helpText, lang).then((res) => {
-    data.questions[index].helpText = res.data.text[0]
-  })
+  data.questions[index].helpText !== ""
+    ? getTranslation(data.questions[index].helpText, lang).then((res) => {
+        data.questions[index].helpText = res.data.text[0]
+      })
+    : null
 
 const translateQuestionPlaceholder = (data, index, lang) =>
-  getTranslation(data.questions[index].placeholder, lang).then((res) => {
-    data.questions[index].placeholder = res.data.text[0]
-  })
+  data.questions[index].placeholder !== ""
+    ? getTranslation(data.questions[index].placeholder, lang).then((res) => {
+        data.questions[index].placeholder = res.data.text[0]
+      })
+    : null
 
 const translateQuestionOption = (data, queIndex, optIndex, lang) =>
-  getTranslation(data.questions[queIndex].options[optIndex], lang).then(
-    (res) => {
-      data.questions[queIndex].options[optIndex] = res.data.text[0]
-    },
-  )
+  data.questions[queIndex].options[optIndex] !== ""
+    ? getTranslation(data.questions[queIndex].options[optIndex], lang).then(
+        (res) => {
+          data.questions[queIndex].options[optIndex] = res.data.text[0]
+        },
+      )
+    : null
