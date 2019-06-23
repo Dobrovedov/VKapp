@@ -12,7 +12,7 @@ const WelcomePanel = ({ title, description, onClick }) => {
         padding: 0,
       }}
     >
-      <Alert onClose={() => console.log()}>
+      <Alert onClose={onClick}>
         <h2>{title}</h2>
         <p>{description}</p>
         <Div style={{ display: "flex" }}>
