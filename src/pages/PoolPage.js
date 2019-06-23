@@ -105,13 +105,14 @@ const PoolPage = () => {
     <div>
       <View activePanel={activePanel}>
         {[
-          <Panel id="Welcome">
+          <Panel id="Welcome" className="WelcomePage">
             <WelcomePanel
               onClick={() => {
                 setActivePanel(0)
               }}
               title={poolData.meta.title}
               description={poolData.meta.description}
+              company={poolData.meta.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
