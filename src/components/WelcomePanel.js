@@ -22,7 +22,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
     >
       <Div style={{ fontSize: "1.5em" }}>
         {title}
-        <Div style={{ fontSize: "0.4em" }}>by {company}</Div>
+        {company && <Div style={{ fontSize: "0.4em" }}>by {company}</Div>}
       </Div>
       <Div
         style={{
