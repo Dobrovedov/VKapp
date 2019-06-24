@@ -20,12 +20,13 @@ const RadioQuestion = ({
       {options.map((option) => (
         <Radio
           name={id}
-          description={option}
           checked={value.selectedAnswer === option}
           onChange={(event) => {
             onChange({ selectedAnotherOption: false, selectedAnswer: option })
           }}
-        />
+        >
+          {option}
+        </Radio>
       ))}
       {hasAnotherOption && (
         <Radio
