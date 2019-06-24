@@ -69,11 +69,13 @@ const SurveyPage = () => {
     // Generate new response
     // If no was provided before
     if (!responseId) {
-      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
-        (response) => {
-          setResponseId(response.data.id)
-        },
-      )
+      sendAnswers(
+        poolId,
+        prepareResponse(poolId, userAnswers),
+        prepareUser(user),
+      ).then((response) => {
+        setResponseId(response.data.id)
+      })
       return
     }
 
@@ -171,11 +173,6 @@ const SurveyPage = () => {
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
-                    sendAnswers(
-                      poolData.id,
-                      prepareResponse(poolData.id, userAnswers),
-                      prepareUser(user),
-                    )
                     sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
