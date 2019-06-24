@@ -8,7 +8,7 @@ export const getSurvey = (id) =>
 export const sendAnswers = (id, response, user) =>
   axios.post(
     `https://foodtechmoneymaker.herokuapp.com/surveys/${id}/responses`,
-    { ...response, user },
+    { ...response, vkUser: user },
     {
       mode: "no-cors",
     },
