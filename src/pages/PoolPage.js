@@ -101,6 +101,8 @@ const PoolPage = () => {
 
   const totalQuestionsNumber = poolData.questions.length - 1
 
+  console.log(poolData.meta.company.companyName)
+
   return (
     <div>
       <View activePanel={activePanel}>
@@ -112,7 +114,7 @@ const PoolPage = () => {
               }}
               title={poolData.meta.title}
               description={poolData.meta.description}
-              company={poolData.meta.companyName}
+              company={poolData.meta.company.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
