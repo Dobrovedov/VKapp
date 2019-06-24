@@ -18,11 +18,11 @@ import WelcomePanel from "../components/WelcomePanel"
 import QuestionControls from "../components/QuestionControls/"
 
 import usePrevious from "../hooks/usePrevious"
-
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
-import prepareResponse from "../prepareResponse"
+import prepareResponse from "../utils/prepareResponse"
+import prepareUser from "../utils/prepareUser"
 
-const PoolPage = () => {
+const SurveyPage = ({ user }) => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
@@ -151,6 +151,11 @@ const PoolPage = () => {
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
+                    sendAnswers(
+                      poolData.id,
+                      prepareResponse(poolData.id, userAnswers),
+                      prepareUser(user),
+                    )
                     sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
@@ -171,4 +176,4 @@ const PoolPage = () => {
   )
 }
 
-export default PoolPage
+export default SurveyPage
