@@ -19,7 +19,7 @@ import QuestionControls from "../components/QuestionControls/"
 
 import usePrevious from "../hooks/usePrevious"
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
-import prepareResponse from "../prepareResponse"
+import prepareResponse from "../utils/prepareResponse"
 import prepareUser from "../utils/prepareUser"
 
 const SurveyPage = ({ user }) => {
