@@ -8,7 +8,7 @@ import DropdownQuestion from "./DropdownQuestion"
 import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
-const Question = ({ question, value, onChange, status }) => {
+const Question = ({ question, value, onChange }) => {
   if (question.type === "TEXTAREA") {
     return (
       <FormLayout>

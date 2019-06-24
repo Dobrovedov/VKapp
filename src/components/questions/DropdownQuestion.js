@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Select, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Select, Cell } from "@vkontakte/vkui"
 
 const DropdownQuestion = ({
   id,
@@ -13,6 +13,9 @@ const DropdownQuestion = ({
   onChange,
 }) => {
   console.log(value.selectedAnswer)
+
+  useEffect(() => onChange({ selectedAnswer: options[0] }), [])
+
   return (
     <>
       <Cell description={description} multiline>
@@ -28,7 +31,7 @@ const DropdownQuestion = ({
         }}
         value={value.selectedAnswer}
       >
-        {options.map((text, index) => {
+        {options.map((text) => {
           return <option value={text}>{text}</option>
         })}
       </Select>
