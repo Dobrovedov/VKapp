@@ -18,11 +18,17 @@ import WelcomePanel from "../components/WelcomePanel"
 import QuestionControls from "../components/QuestionControls/"
 
 import usePrevious from "../hooks/usePrevious"
-
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
-import prepareResponse from "../prepareResponse"
+import prepareResponse from "../utils/prepareResponse"
+import prepareUser from "../utils/prepareUser"
 
-const PoolPage = () => {
+import realConnect from "@vkontakte/vkui-connect"
+import mockConnect from "@vkontakte/vkui-connect-mock"
+
+// Mocking connect
+let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect
+
+const SurveyPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
@@ -33,6 +39,18 @@ const PoolPage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
+
+  const [user, setUser] = useState()
+
+  // User Retrieval
+  useEffect(() => {
+    connect.subscribe((e) => {
+      console.log(e)
+      if (e.detail.type === "VKWebAppGetUserInfoResult") {
+        setUser(e.detail.data)
+      }
+    })
+  }, [user])
 
   // Data Retrieval
   useEffect(() => {
@@ -108,6 +126,7 @@ const PoolPage = () => {
           <Panel id="Welcome">
             <WelcomePanel
               onClick={() => {
+                connect.send("VKWebAppGetUserInfo")
                 setActivePanel(0)
               }}
               title={poolData.meta.title}
@@ -152,6 +171,11 @@ const PoolPage = () => {
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
+                    sendAnswers(
+                      poolData.id,
+                      prepareResponse(poolData.id, userAnswers),
+                      prepareUser(user),
+                    )
                     sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
@@ -172,4 +196,4 @@ const PoolPage = () => {
   )
 }
 
-export default PoolPage
+export default SurveyPage
