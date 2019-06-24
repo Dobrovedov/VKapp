@@ -12,10 +12,9 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
         right: 0,
         left: 0,
         bottom: 0,
-        paddingTop: 80,
+        paddingTop: "8vh",
         paddingRight: 30,
         paddingLeft: 30,
-        paddingBottom: 60,
         textAlign: "center",
         color: "white",
       }}
@@ -27,7 +26,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
       <Div
         style={{
           fontSize: "0.8em",
-          maxHeight: "300px",
+          maxHeight: "30vh",
           marginBottom: 20,
           overflow: "auto",
         }}
