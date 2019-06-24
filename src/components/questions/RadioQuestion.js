@@ -14,7 +14,9 @@ const RadioQuestion = ({
 }) => {
   return (
     <>
-      <Cell description={description}>{title}</Cell>
+      <Cell description={description} multiline>
+        {title}
+      </Cell>
       {options.map((option) => (
         <Radio
           name={id}

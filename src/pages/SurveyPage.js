@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import {
   View,
@@ -14,21 +14,25 @@ import { validateAnswer } from "../utils/validators"
 import ErrorPage from "../pages/ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
+import WelcomePanel from "../components/WelcomePanel"
 import QuestionControls from "../components/QuestionControls/"
 
-import { getSurvey, sendAnswers } from "../api"
-import prepareResponse from "../utils/prepareResponse"
+import usePrevious from "../hooks/usePrevious"
+import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
+import prepareResponse from "../prepareResponse"
 import prepareUser from "../utils/prepareUser"
 
 const SurveyPage = ({ user }) => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
-  const [activePanel, setActivePanel] = useState(0)
+  const [activePanel, setActivePanel] = useState("Welcome")
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
+  const [responseId, setResponseId] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
-  console.log(user)
+
+  const prevUserAnswer = usePrevious(userAnswers)
 
   // Data Retrieval
   useEffect(() => {
@@ -37,6 +41,48 @@ const SurveyPage = ({ user }) => {
       setIsLoading(false)
     })
   }, [poolId])
+
+  const sendRequestByNext = (question) => {
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
+    }
+
+    // Generate new response
+    // If no was provided before
+    if (!responseId) {
+      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
+        (response) => {
+          setResponseId(response.data.id)
+        },
+      )
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
+  }
+  const sendRequestByBack = (question) => {
+    // Skip if no changes happened
+    if (prevUserAnswer[question.id] === userAnswers[question.id]) {
+      return
+    }
+
+    if (!responseId) {
+      return
+    }
+
+    // Update response with new values
+    sendChangedAnswers(
+      poolId,
+      responseId,
+      prepareResponse(poolData.id, userAnswers),
+    )
+  }
 
   // Make loading Page or Spinner
   if (isLoading) {
@@ -59,6 +105,15 @@ const SurveyPage = ({ user }) => {
     <div>
       <View activePanel={activePanel}>
         {[
+          <Panel id="Welcome">
+            <WelcomePanel
+              onClick={() => {
+                setActivePanel(0)
+              }}
+              title={poolData.meta.title}
+              description={poolData.meta.description}
+            />
+          </Panel>,
           ...poolData.questions.map((question, index) => {
             const error =
               question.required &&
@@ -87,10 +142,12 @@ const SurveyPage = ({ user }) => {
                 />
                 <QuestionControls
                   onBack={() => {
+                    sendRequestByBack(question)
                     setActivePanel(activePanel - 1)
                   }}
                   onNext={() => {
                     setSeenQuestions([...seenQuestions, question.id])
+                    sendRequestByNext(question)
                     setActivePanel(activePanel + 1)
                   }}
                   onSubmit={() => {
@@ -99,6 +156,7 @@ const SurveyPage = ({ user }) => {
                       prepareResponse(poolData.id, userAnswers),
                       prepareUser(user),
                     )
+                    sendRequestByNext(question)
                     setActivePanel("confirmation")
                   }}
                   isNextButtonDisabled={!!error}
