@@ -22,7 +22,13 @@ import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../utils/prepareResponse"
 import prepareUser from "../utils/prepareUser"
 
-const SurveyPage = ({ user }) => {
+import realConnect from "@vkontakte/vkui-connect"
+import mockConnect from "@vkontakte/vkui-connect-mock"
+
+// Mocking connect
+let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect
+
+const SurveyPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
@@ -33,6 +39,18 @@ const SurveyPage = ({ user }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
+
+  const [user, setUser] = useState()
+
+  // User Retrieval
+  useEffect(() => {
+    connect.subscribe((e) => {
+      console.log(e)
+      if (e.detail.type === "VKWebAppGetUserInfoResult") {
+        setUser(e.detail.data)
+      }
+    })
+  }, [user])
 
   // Data Retrieval
   useEffect(() => {
@@ -108,10 +126,12 @@ const SurveyPage = ({ user }) => {
           <Panel id="Welcome">
             <WelcomePanel
               onClick={() => {
+                connect.send("VKWebAppGetUserInfo")
                 setActivePanel(0)
               }}
               title={poolData.meta.title}
               description={poolData.meta.description}
+              company={poolData.meta.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
