@@ -8,6 +8,7 @@ export const translateData = (data, lang) => {
   translateDescription(data, lang)
   translateConfirmationMessage(data, lang)
   translateQuestions(data, lang)
+  return data
 }
 
 export const getTranslation = (text, lang) =>
@@ -44,13 +45,6 @@ const translateQuestions = (data, lang) => {
     translateQuestionTitle(data, i, lang)
     translateQuestionHelpText(data, i, lang)
     translateQuestionPlaceholder(data, i, lang)
-    translateOptions(data, i, lang)
-  }
-}
-
-const translateOptions = (data, index, lang) => {
-  for (let i in data.questions[index].options) {
-    translateQuestionOption(data, index, i, lang)
   }
 }
 
@@ -73,13 +67,4 @@ const translateQuestionPlaceholder = (data, index, lang) =>
     ? getTranslation(data.questions[index].placeholder, lang).then((res) => {
         data.questions[index].placeholder = res.data.text[0]
       })
-    : null
-
-const translateQuestionOption = (data, queIndex, optIndex, lang) =>
-  data.questions[queIndex].options[optIndex] !== ""
-    ? getTranslation(data.questions[queIndex].options[optIndex], lang).then(
-        (res) => {
-          data.questions[queIndex].options[optIndex] = res.data.text[0]
-        },
-      )
     : null

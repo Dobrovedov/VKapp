@@ -43,8 +43,7 @@ const PoolPage = () => {
   // Data Retrieval
   useEffect(() => {
     getSurvey(poolId).then((res) => {
-      translateData(res.data, language)
-      setPoolData(res.data)
+      setPoolData(translateData(res.data, language))
       setIsLoading(false)
     })
   }, [poolId])
@@ -189,10 +188,11 @@ const PoolPage = () => {
             <PanelHeader>Выбор страны</PanelHeader>
             <LanguagePanel
               language={language}
-              setActivePanel={setActivePanel}
-              setLanguage={setLanguage}
-              prevPanel={prevPanel}
-              questionTranslation={(lang) => translateData(poolData, lang)}
+              setAnotherLanguage={(lang) => {
+                setLanguage(lang)
+                translateData(poolData, lang)
+                setActivePanel(prevPanel)
+              }}
             />
           </Panel>,
         ]}
