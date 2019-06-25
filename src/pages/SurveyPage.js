@@ -131,7 +131,7 @@ const SurveyPage = () => {
               }}
               title={poolData.meta.title}
               description={poolData.meta.description}
-              company={poolData.meta.companyName}
+              company={poolData.meta.company.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
