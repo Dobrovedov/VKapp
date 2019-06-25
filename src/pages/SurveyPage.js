@@ -69,11 +69,9 @@ const SurveyPage = () => {
     getSurvey(poolId).then((res) => {
       setPoolData(res.data)
       setIsLoading(false)
-      if (res.data) {
-        translateSurveyMeta(res.data, language).then((translation) =>
-          setTranslated(translation),
-        )
-      }
+      translateSurveyMeta(res.data, language).then((translation) =>
+        setTranslated(translation),
+      )
     })
   }, [poolId, language])
 
