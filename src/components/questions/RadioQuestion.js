@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Radio, Cell } from "@vkontakte/vkui"
+import { Radio, Cell, Spinner } from "@vkontakte/vkui"
 
 import useTranslation from "../../hooks/useTranslation"
 
@@ -15,7 +15,7 @@ const RadioQuestion = ({
   hasAnotherOption,
   language,
 }) => {
-  const translated = useTranslation(
+  const { translated, isLoading } = useTranslation(
     {
       title,
       description,
@@ -23,6 +23,10 @@ const RadioQuestion = ({
     },
     language,
   )
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>

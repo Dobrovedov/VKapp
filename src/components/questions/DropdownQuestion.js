@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Select, Cell } from "@vkontakte/vkui"
+import { Select, Cell, Spinner } from "@vkontakte/vkui"
 
 import useTranslation from "../../hooks/useTranslation"
 
@@ -15,7 +15,14 @@ const DropdownQuestion = ({
   onChange,
   language,
 }) => {
-  const translated = useTranslation({ title, description, options }, language)
+  const { translated, isLoading } = useTranslation(
+    { title, description, options },
+    language,
+  )
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>

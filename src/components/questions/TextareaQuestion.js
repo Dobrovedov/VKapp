@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Cell, Input } from "@vkontakte/vkui"
+import { Cell, Input, Spinner } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
 import useTranslation from "../../hooks/useTranslation"
@@ -15,7 +15,14 @@ const TextareaQuestion = ({
   value,
   language,
 }) => {
-  const translated = useTranslation({ title, description }, language)
+  const { translated, isLoading } = useTranslation(
+    { title, description },
+    language,
+  )
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>

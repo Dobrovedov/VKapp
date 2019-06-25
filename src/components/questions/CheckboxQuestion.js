@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Checkbox, Cell } from "@vkontakte/vkui"
+import { Checkbox, Cell, Spinner } from "@vkontakte/vkui"
 
 import useTranslation from "../../hooks/useTranslation"
 
@@ -20,7 +20,7 @@ const CheckboxQuestion = ({
     (answer) => answer === "Другое",
   )
 
-  const translated = useTranslation(
+  const { translated, isLoading } = useTranslation(
     {
       title,
       description,
@@ -35,6 +35,10 @@ const CheckboxQuestion = ({
       selectedAnswers: chosenAnswers,
     })
   }, [chosenAnswers])
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>
