@@ -45,7 +45,6 @@ const SurveyPage = () => {
   // User Retrieval
   useEffect(() => {
     connect.subscribe((e) => {
-      console.log(e)
       if (e.detail.type === "VKWebAppGetUserInfoResult") {
         setUser(e.detail.data)
       }
