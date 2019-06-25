@@ -2,21 +2,21 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Panel, PanelHeader, Group, List, Cell } from "@vkontakte/vkui"
 import Icon24Done from "@vkontakte/icons/dist/24/done"
-import { translate } from "../translator"
+// import { translate } from "../translator"
 
 const LanguagePanel = ({ language, setAnotherLanguage }) => {
   const languages = [
     ["ru", "Русский"],
-    ["en", "Английский"],
-    ["be", "Белорусский"],
-    ["bg", "Болгарский"],
-    ["cs", "Чешский"],
-    ["da", "Датский"],
-    ["de", "Немецкий"],
-    ["el", "Греческий"],
-    ["es", "Испанский"],
-    ["fr", "Французский"],
-    ["zh", "Китайский"],
+    ["en", "English"],
+    ["be", "Беларускі"],
+    ["bg", "Български"],
+    ["cs", "Česky"],
+    ["da", "Deens"],
+    ["de", "Deutsch"],
+    ["el", "ελληνικά"],
+    ["es", "español"],
+    ["fr", "francais"],
+    ["zh", "中国"],
   ]
   return (
     <Group>
@@ -30,7 +30,7 @@ const LanguagePanel = ({ language, setAnotherLanguage }) => {
               ) : null
             }
           >
-            {translate(country[1], language)}
+            {country[1]}
           </Cell>
         ))}
       </List>

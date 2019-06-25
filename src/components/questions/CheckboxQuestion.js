@@ -3,6 +3,8 @@ import PropTypes from "prop-types"
 
 import { Checkbox, Cell, FormLayoutGroup } from "@vkontakte/vkui"
 
+import useTranslation from "../../hooks/useTranslation"
+
 const CheckboxQuestion = ({
   id,
   title,
@@ -11,11 +13,22 @@ const CheckboxQuestion = ({
   value,
   onChange,
   hasAnotherOption,
+  language,
 }) => {
   const [chosenAnswers, setChosenAnswers] = useState(value.selectedAnswers)
   const isAnotherOptionChecked = chosenAnswers.some(
     (answer) => answer === "Другое",
   )
+
+  const translated = useTranslation(
+    {
+      title,
+      description,
+      options,
+    },
+    language,
+  )
+
   useEffect(() => {
     onChange({
       selectedAnotherOption: isAnotherOptionChecked,
@@ -25,10 +38,10 @@ const CheckboxQuestion = ({
 
   return (
     <>
-      <Cell description={description} multiline>
-        {title}
+      <Cell description={translated.description || description} multiline>
+        {translated.title || title}
       </Cell>
-      {options.map((option) => (
+      {options.map((option, index) => (
         <Checkbox
           value={option}
           defaultChecked={chosenAnswers.indexOf(option) !== -1}
@@ -42,7 +55,7 @@ const CheckboxQuestion = ({
             }
           }}
         >
-          {option}
+          {(translated.options && translated.options[index]) || option}
         </Checkbox>
       ))}
       {hasAnotherOption && (

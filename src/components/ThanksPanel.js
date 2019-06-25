@@ -2,7 +2,15 @@ import React from "react"
 import { Div } from "@vkontakte/vkui"
 import PropTypes from "prop-types"
 
-const ThanksPanel = ({ confirmationMessage }) => {
+import useTranslate from "../hooks/useTranslate"
+
+const ThanksPanel = ({ confirmationMessage, language }) => {
+  const translatedTitle = useTranslate("Опрос завершён", language)
+  const translatedCofirmationMessage = useTranslate(
+    confirmationMessage,
+    language,
+  )
+
   return (
     <Div
       style={{
@@ -12,7 +20,7 @@ const ThanksPanel = ({ confirmationMessage }) => {
         textAlign: "center",
       }}
     >
-      <h2>Опрос завершён</h2>
+      <h2>{translatedTitle}</h2>
       <img
         className="Sticker"
         src={"../img/sticker/" + (Math.floor(Math.random() * 10) + 1) + ".png"}
@@ -23,7 +31,7 @@ const ThanksPanel = ({ confirmationMessage }) => {
           margin: "20px auto",
         }}
       />
-      <p>{confirmationMessage}</p>
+      <p>{translatedCofirmationMessage || confirmationMessage}</p>
     </Div>
   )
 }

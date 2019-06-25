@@ -3,19 +3,21 @@ import PropTypes from "prop-types"
 
 import { Button } from "@vkontakte/vkui"
 
-const NextButton = ({ onClick, disabled }) => {
+const NextButton = ({ onClick, disabled, text }) => {
   return (
     <Button size="l" stretched onClick={onClick} disabled={disabled}>
-      Далее
+      {text}
     </Button>
   )
 }
 
 NextButton.defaultProps = {
   disabled: false,
+  text: "Далее",
 }
 
 NextButton.propTypes = {
+  text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 }

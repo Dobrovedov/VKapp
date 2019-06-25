@@ -21,36 +21,45 @@ import QuestionControls from "../components/QuestionControls/"
 import LanguagePanel from "../components/LanguagePanel"
 
 import usePrevious from "../hooks/usePrevious"
+import useTranslate from "../hooks/useTranslate"
 
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
-import { translateData } from "../translator.js"
+import { translateSurveyMeta } from "../translator.js"
 import prepareResponse from "../prepareResponse"
 
 const PoolPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
+
   const [activePanel, setActivePanel] = useState("Welcome")
+  const [prevPanel, setPrevPanel] = useState("Welcome")
+
   const [userAnswers, setUserAnswers] = useState({})
   const [seenQuestions, setSeenQuestions] = useState([])
   const [responseId, setResponseId] = useState(null)
-  const [prevPanel, setPrevPanel] = useState("Welcome")
-  const [language, setLanguage] = useState(navigator.language.substr(0, 2))
-  const [rawData, setRawData] = useState({})
+
+  const [language, setLanguage] = useState(navigator.language.slice(0, 2))
+  const [translated, setTranslated] = useState()
 
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
 
-  const objectCopy = (obj) => JSON.parse(JSON.stringify(obj))
-
   // Data Retrieval
   useEffect(() => {
     getSurvey(poolId).then((res) => {
-      setRawData(objectCopy(res.data))
-      setPoolData(translateData(res.data, language))
+      setPoolData(res.data)
       setIsLoading(false)
+      translateSurveyMeta(res.data, language).then((translation) =>
+        setTranslated(translation),
+      )
     })
-  }, [poolId])
+  }, [poolId, language])
+
+  // Control Translation
+  const nextButtonTranslation = useTranslate("Далее", language)
+  const backButtonTranslation = useTranslate("Назад", language)
+  const submitButtonTranslation = useTranslate("Завершить", language)
 
   const sendRequestByNext = (question) => {
     // Skip if no changes happened
@@ -76,6 +85,7 @@ const PoolPage = () => {
       prepareResponse(poolData.id, userAnswers),
     )
   }
+
   const sendRequestByBack = (question) => {
     // Skip if no changes happened
     if (prevUserAnswer[question.id] === userAnswers[question.id]) {
@@ -117,11 +127,12 @@ const PoolPage = () => {
         {[
           <Panel id="Welcome">
             <WelcomePanel
+              language={language}
               onClick={() => {
                 setActivePanel(0)
               }}
-              title={poolData.meta.title}
-              description={poolData.meta.description}
+              title={translated && translated.title}
+              description={translated && translated.description}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
@@ -137,7 +148,7 @@ const PoolPage = () => {
                   left={
                     <HeaderButton
                       onClick={() => {
-                        setPrevPanel(objectCopy(activePanel))
+                        setPrevPanel(activePanel)
                         setActivePanel("languages")
                       }}
                     >
@@ -145,7 +156,7 @@ const PoolPage = () => {
                     </HeaderButton>
                   }
                 >
-                  {poolData.meta.title}
+                  {translated && translated.title}
                 </PanelHeader>
                 <Progress value={(activePanel / totalQuestionsNumber) * 100} />
                 {hasError && (
@@ -181,13 +192,21 @@ const PoolPage = () => {
                   isNextButtonDisabled={!!error}
                   isFirstQuestion={activePanel === 0}
                   isLastQuestion={activePanel === totalQuestionsNumber}
+                  translation={{
+                    nextButton: nextButtonTranslation,
+                    backButton: backButtonTranslation,
+                    submitButton: submitButtonTranslation,
+                  }}
                 />
               </Panel>
             )
           }),
           // Extract into separate component
           <Panel id="confirmation">
-            <ThanksPanel confirmationMessage="Спасибо за уделённое нам время!" />
+            <ThanksPanel
+              confirmationMessage="Спасибо за уделённое нам время!"
+              language={language}
+            />
           </Panel>,
           <Panel id="languages">
             <PanelHeader>Выбор страны</PanelHeader>
@@ -195,7 +214,6 @@ const PoolPage = () => {
               language={language}
               setAnotherLanguage={(lang) => {
                 setLanguage(lang)
-                setPoolData(translateData(rawData, lang))
                 setActivePanel(prevPanel)
               }}
             />

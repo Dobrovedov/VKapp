@@ -4,6 +4,8 @@ import PropTypes from "prop-types"
 import { Cell, Input, FormLayoutGroup } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
+import useTranslation from "../../hooks/useTranslation"
+
 const TextareaQuestion = ({
   id,
   title,
@@ -11,11 +13,14 @@ const TextareaQuestion = ({
   description,
   onChange,
   value,
+  language,
 }) => {
+  const translated = useTranslation({ title, description }, language)
+
   return (
     <>
-      <Cell description={description} multiline>
-        {title}
+      <Cell description={translated.description || description} multiline>
+        {translated.title || title}
       </Cell>
       <Input
         type="text"
