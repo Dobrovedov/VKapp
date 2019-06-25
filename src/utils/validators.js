@@ -4,13 +4,13 @@ const validateTextarea = (value) => {
   }
 }
 
-const validateCheckboxAndDropdown = (value) => {
+const validateCheckbox = (value) => {
   if (!value || !value.selectedAnswers || value.selectedAnswers.length === 0) {
     return "Выберите хотя бы одно поле"
   }
 }
 
-const validateRadiobox = (value) => {
+const validateRadioboxAndDropdown = (value) => {
   if (!value || !value.selectedAnswer) {
     return "Выберите хотя бы один ответ"
   }
@@ -21,12 +21,12 @@ export const validateAnswer = (type, value) => {
     return validateTextarea(value)
   }
 
-  if (type === "MULTIPLE_CHOICE") {
-    return validateRadiobox(value)
+  if (type === "MULTIPLE_CHOICE" || type === "DROPDOWN") {
+    return validateRadioboxAndDropdown(value)
   }
 
-  if (type === "CHECKBOX" || type === "DROPDOWN") {
-    return validateCheckboxAndDropdown(value)
+  if (type === "CHECKBOX") {
+    return validateCheckbox(value)
   }
 
   return "Неизвестная ошибка"

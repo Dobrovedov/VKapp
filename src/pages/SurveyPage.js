@@ -42,6 +42,8 @@ const SurveyPage = () => {
 
   const [user, setUser] = useState()
 
+  console.log(poolData)
+
   // User Retrieval
   useEffect(() => {
     connect.subscribe((e) => {
@@ -142,7 +144,7 @@ const SurveyPage = () => {
               validateAnswer(question.type, userAnswers[question.id])
 
             const hasError = error && seenQuestions.indexOf(question.id) !== -1
-
+            console.log(error)
             return (
               <Panel id={index}>
                 <PanelHeader>{poolData.meta.title}</PanelHeader>

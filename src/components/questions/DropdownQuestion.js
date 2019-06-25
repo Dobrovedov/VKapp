@@ -12,7 +12,10 @@ const DropdownQuestion = ({
   value,
   onChange,
 }) => {
-  console.log(value.selectedAnswer)
+  if (!value.selectedAnswer) {
+    onChange({ selectedAnswer: options[0] })
+  }
+
   return (
     <>
       <Cell description={description} multiline>
