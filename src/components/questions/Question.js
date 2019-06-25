@@ -9,7 +9,7 @@ import TextareaQuestion from "./TextareaQuestion"
 import CheckboxQuestion from "./CheckboxQuestion"
 
 const Question = ({ question, value, onChange, status, language }) => {
-  if (question.type === "TEXTAREA") {
+  if (question.type === "TEXTAREA" || question.type === "TEXT") {
     return (
       <FormLayout>
         <TextareaQuestion
@@ -20,6 +20,7 @@ const Question = ({ question, value, onChange, status, language }) => {
           value={value}
           onChange={onChange}
           language={language}
+          expanded={question.type === "TEXT"}
         />
       </FormLayout>
     )
