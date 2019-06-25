@@ -13,6 +13,9 @@ export const translate = (text, lang) =>
   })
 
 export const translateSurveyMeta = async (survey, language) => {
+  if (!survey.meta) {
+    return
+  }
   const title = (await translate(survey.meta.title, language)).data.text[0]
   const description = (await translate(survey.meta.description, language)).data
     .text[0]

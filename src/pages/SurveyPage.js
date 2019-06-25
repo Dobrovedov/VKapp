@@ -69,9 +69,11 @@ const SurveyPage = () => {
     getSurvey(poolId).then((res) => {
       setPoolData(res.data)
       setIsLoading(false)
-      translateSurveyMeta(res.data, language).then((translation) =>
-        setTranslated(translation),
-      )
+      if (res.data) {
+        translateSurveyMeta(res.data, language).then((translation) =>
+          setTranslated(translation),
+        )
+      }
     })
   }, [poolId, language])
 
@@ -137,7 +139,7 @@ const SurveyPage = () => {
   }
 
   if (!poolData || !poolId) {
-    return <ErrorPage />
+    return <ErrorPage language={language} />
   }
 
   const totalQuestionsNumber = poolData.questions.length - 1
