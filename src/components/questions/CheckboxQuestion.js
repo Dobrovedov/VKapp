@@ -29,6 +29,9 @@ const CheckboxQuestion = ({
     language,
   )
 
+  // Do not change dependency array
+  // Until reason on infinite re-render
+  // Will be discovered
   useEffect(() => {
     onChange({
       selectedAnotherOption: isAnotherOptionChecked,

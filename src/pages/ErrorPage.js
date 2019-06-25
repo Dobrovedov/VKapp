@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Panel, Div } from "@vkontakte/vkui"
-import ErrorPic from "../components/ErrorPic"
+import RandomErrorSticker from "../components/RandomErrorSticker"
 
 import useTranslate from "../hooks/useTranslate"
 
@@ -22,7 +22,7 @@ const ErrorPage = ({ language }) => {
           }}
         >
           <h2>{translatedTitle}</h2>
-          <ErrorPic alt={"whoops"} />
+          <RandomErrorSticker alt={"whoops"} />
           <p>{translatedDescription}</p>
         </Div>
       </Panel>

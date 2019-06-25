@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import PropTypes from "prop-types"
 
 const randomPic = () => {
@@ -7,7 +7,9 @@ const randomPic = () => {
   return "../img/errorPics/" + rand + ".png"
 }
 
-const ErrorPic = ({ alt }) => {
+const RandomErrorSticker = ({ alt }) => {
+  const imgUrl = useMemo(() => randomPic(), [alt])
+
   return (
     <img
       class="Error"
@@ -17,14 +19,14 @@ const ErrorPic = ({ alt }) => {
         maxWidth: "240px",
         margin: "20px auto",
       }}
-      src={randomPic()}
+      src={imgUrl}
       alt={alt}
     />
   )
 }
 
-ErrorPic.propTypes = {
+RandomErrorSticker.propTypes = {
   alt: PropTypes.string.isRequired,
 }
 
-export default ErrorPic
+export default RandomErrorSticker

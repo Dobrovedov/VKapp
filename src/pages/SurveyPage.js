@@ -11,19 +11,19 @@ import {
   HeaderButton,
 } from "@vkontakte/vkui"
 import Icon24Globe from "@vkontakte/icons/dist/24/globe"
-import { validateAnswer } from "../utils/validators"
 
-import ErrorPage from "../pages/ErrorPage"
+import ErrorPage from "./ErrorPage"
 import Question from "../components/questions/Question"
 import ThanksPanel from "../components/ThanksPanel"
 import WelcomePanel from "../components/WelcomePanel"
-import QuestionControls from "../components/QuestionControls/"
 import LanguagePanel from "../components/LanguagePanel"
+import QuestionControls from "../components/QuestionControls"
 
 import usePrevious from "../hooks/usePrevious"
 import useTranslate from "../hooks/useTranslate"
 
 import { translateSurveyMeta } from "../translator.js"
+import { validateAnswer } from "../utils/validators"
 import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../utils/prepareResponse"
 import prepareUser from "../utils/prepareUser"
@@ -35,9 +35,8 @@ import mockConnect from "@vkontakte/vkui-connect-mock"
 let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect
 
 const SurveyPage = () => {
-  const poolId = window.location.hash.slice(1)
-  const [poolData, setPoolData] = useState({})
-
+  const surveyId = window.location.hash.slice(1)
+  const [surveyData, setSurveyData] = useState({})
   const [activePanel, setActivePanel] = useState("Welcome")
   const [prevPanel, setPrevPanel] = useState("Welcome")
 
@@ -65,14 +64,14 @@ const SurveyPage = () => {
 
   // Data Retrieval
   useEffect(() => {
-    getSurvey(poolId).then((res) => {
-      setPoolData(res.data)
+    getSurvey(surveyId).then((res) => {
+      setSurveyData(res.data)
       setIsLoading(false)
       translateSurveyMeta(res.data, language).then((translation) =>
         setTranslated(translation),
       )
     })
-  }, [poolId, language])
+  }, [surveyId, language])
 
   // Control Translation
   const nextButtonTranslation = useTranslate("Далее", language)
@@ -89,8 +88,8 @@ const SurveyPage = () => {
     // If no was provided before
     if (!responseId) {
       sendAnswers(
-        poolId,
-        prepareResponse(poolId, userAnswers),
+        surveyId,
+        prepareResponse(surveyId, userAnswers),
         prepareUser(user),
       ).then((response) => {
         setResponseId(response.data.id)
@@ -100,9 +99,9 @@ const SurveyPage = () => {
 
     // Update response with new values
     sendChangedAnswers(
-      poolId,
+      surveyId,
       responseId,
-      prepareResponse(poolData.id, userAnswers),
+      prepareResponse(surveyData.id, userAnswers),
     )
   }
 
@@ -118,13 +117,12 @@ const SurveyPage = () => {
 
     // Update response with new values
     sendChangedAnswers(
-      poolId,
+      surveyId,
       responseId,
-      prepareResponse(poolData.id, userAnswers),
+      prepareResponse(surveyData.id, userAnswers),
     )
   }
 
-  // Make loading Page or Spinner
   if (isLoading) {
     return (
       <View activePanel="spinner">
@@ -135,17 +133,17 @@ const SurveyPage = () => {
     )
   }
 
-  if (!poolData || !poolId) {
+  if (!surveyData || !surveyId) {
     return <ErrorPage language={language} />
   }
 
-  const totalQuestionsNumber = poolData.questions.length - 1
+  const totalQuestionsNumber = surveyData.questions.length - 1
 
   return (
     <div>
       <View activePanel={activePanel}>
         {[
-          <Panel id="Welcome">
+          <Panel id="Welcome" style={{ padding: 0 }}>
             <WelcomePanel
               language={language}
               onClick={() => {
@@ -154,10 +152,10 @@ const SurveyPage = () => {
               }}
               title={translated && translated.title}
               description={translated && translated.description}
-              company={poolData.meta.company.companyName}
+              company={surveyData.meta.company.companyName}
             />
           </Panel>,
-          ...poolData.questions.map((question, index) => {
+          ...surveyData.questions.map((question, index) => {
             const error =
               question.required &&
               validateAnswer(question.type, userAnswers[question.id])
@@ -223,7 +221,6 @@ const SurveyPage = () => {
               </Panel>
             )
           }),
-          // Extract into separate component
           <Panel id="confirmation">
             <ThanksPanel
               confirmationMessage="Спасибо за уделённое нам время!"

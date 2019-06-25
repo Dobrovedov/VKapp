@@ -20,6 +20,13 @@ const DropdownQuestion = ({
     language,
   )
 
+  // Initialize with starting value
+  if (!value.selectedAnswer) {
+    onChange({
+      selectedAnswer: options[0],
+    })
+  }
+
   if (isLoading) {
     return <Spinner />
   }
