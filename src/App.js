@@ -1,16 +1,8 @@
 import React from "react"
+import SurveyPage from "./pages/SurveyPage"
 
-import { Switch, Route } from "react-router-dom"
-import AllProviders from "./AllProviders"
-
-import PoolPage from "./pages/PoolPage"
-
-const App = () => (
-  <AllProviders>
-    <Switch>
-      <Route component={PoolPage} />
-    </Switch>
-  </AllProviders>
-)
+const App = () => {
+  return <SurveyPage />
+}
 
 export default App

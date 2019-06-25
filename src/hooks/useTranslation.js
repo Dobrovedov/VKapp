@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { translate } from "../translator"
 
 const useTranslation = ({ title, description, options }, language) => {

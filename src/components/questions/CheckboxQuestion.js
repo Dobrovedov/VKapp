@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Checkbox, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Checkbox, Cell } from "@vkontakte/vkui"
 
 import useTranslation from "../../hooks/useTranslation"
 

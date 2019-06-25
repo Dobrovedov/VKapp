@@ -3,8 +3,6 @@ import PropTypes from "prop-types"
 
 import { Button } from "@vkontakte/vkui"
 
-import useTranslation from "../../hooks/useTranslation"
-
 const SubmitButton = ({ onClick, disabled, text }) => {
   return (
     <Button

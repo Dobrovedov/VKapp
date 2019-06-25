@@ -1,8 +1,7 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
-import { Panel, PanelHeader, Group, List, Cell } from "@vkontakte/vkui"
+import { Group, List, Cell } from "@vkontakte/vkui"
 import Icon24Done from "@vkontakte/icons/dist/24/done"
-// import { translate } from "../translator"
 
 const LanguagePanel = ({ language, setAnotherLanguage }) => {
   const languages = [

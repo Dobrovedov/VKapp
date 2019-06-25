@@ -1,25 +1,58 @@
 import React from "react"
-import { Alert, Button, Div } from "@vkontakte/vkui"
 import PropTypes from "prop-types"
+import { Div, Button } from "@vkontakte/vkui"
 
 import useTranslation from "../hooks/useTranslate"
 
-const WelcomePanel = ({ title, description, onClick, language }) => {
+const WelcomePanel = ({ title, company, description, onClick, language }) => {
   const translatedTitle = useTranslation(title, language)
   const translatedDescription = useTranslation(description, language)
   const translatedButtonStart = useTranslation("Начать", language)
 
   return (
-    <Div style={{ minHeight: "100vw", display: "flex", alignItems: "center" }}>
-      <Alert>
-        <h2>{translatedTitle || title}</h2>
-        <p>{translatedDescription || description}</p>
-        <Div style={{ display: "flex" }}>
-          <Button size="l" stretched onClick={onClick}>
-            {translatedButtonStart}
-          </Button>
-        </Div>
-      </Alert>
+    <Div
+      className="WelcomePage"
+      style={{
+        position: "fixed",
+        top: 0,
+        right: 0,
+        left: 0,
+        bottom: 0,
+        paddingTop: "20vh",
+        paddingRight: 30,
+        paddingLeft: 30,
+        textAlign: "center",
+        color: "white",
+      }}
+    >
+      <Div style={{ fontSize: "1.5em", marginBottom: 20 }}>
+        {translatedTitle || title}
+        {company && <Div style={{ fontSize: "0.4em" }}>by {company}</Div>}
+      </Div>
+      <Div
+        style={{
+          fontSize: "0.8em",
+          maxHeight: "25vh",
+          marginBottom: 20,
+          overflow: "auto",
+        }}
+      >
+        {translatedDescription || description}
+      </Div>
+      <Div>
+        <Button
+          size="l"
+          style={{
+            background: "none",
+            border: "2px solid white",
+            color: "white",
+          }}
+          stretched
+          onClick={onClick}
+        >
+          {translatedButtonStart}
+        </Button>
+      </Div>
     </Div>
   )
 }

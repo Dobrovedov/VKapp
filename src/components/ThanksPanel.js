@@ -6,7 +6,7 @@ import useTranslate from "../hooks/useTranslate"
 
 const ThanksPanel = ({ confirmationMessage, language }) => {
   const translatedTitle = useTranslate("Опрос завершён", language)
-  const translatedCofirmationMessage = useTranslate(
+  const translatedConfirmationMessage = useTranslate(
     confirmationMessage,
     language,
   )
@@ -30,8 +30,9 @@ const ThanksPanel = ({ confirmationMessage, language }) => {
           maxWidth: "240px",
           margin: "20px auto",
         }}
+        alt="Thank You"
       />
-      <p>{translatedCofirmationMessage || confirmationMessage}</p>
+      <p>{translatedConfirmationMessage || confirmationMessage}</p>
     </Div>
   )
 }

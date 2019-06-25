@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 
 import {
   View,
@@ -23,11 +23,18 @@ import LanguagePanel from "../components/LanguagePanel"
 import usePrevious from "../hooks/usePrevious"
 import useTranslate from "../hooks/useTranslate"
 
-import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import { translateSurveyMeta } from "../translator.js"
-import prepareResponse from "../prepareResponse"
+import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
+import prepareResponse from "../utils/prepareResponse"
+import prepareUser from "../utils/prepareUser"
 
-const PoolPage = () => {
+import realConnect from "@vkontakte/vkui-connect"
+import mockConnect from "@vkontakte/vkui-connect-mock"
+
+// Mocking connect
+let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect
+
+const SurveyPage = () => {
   const poolId = window.location.hash.slice(1)
   const [poolData, setPoolData] = useState({})
 
@@ -44,6 +51,18 @@ const PoolPage = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
+
+  const [user, setUser] = useState()
+
+  // User Retrieval
+  useEffect(() => {
+    connect.subscribe((e) => {
+      console.log(e)
+      if (e.detail.type === "VKWebAppGetUserInfoResult") {
+        setUser(e.detail.data)
+      }
+    })
+  }, [user])
 
   // Data Retrieval
   useEffect(() => {
@@ -70,11 +89,13 @@ const PoolPage = () => {
     // Generate new response
     // If no was provided before
     if (!responseId) {
-      sendAnswers(poolId, prepareResponse(poolId, userAnswers)).then(
-        (response) => {
-          setResponseId(response.data.id)
-        },
-      )
+      sendAnswers(
+        poolId,
+        prepareResponse(poolId, userAnswers),
+        prepareUser(user),
+      ).then((response) => {
+        setResponseId(response.data.id)
+      })
       return
     }
 
@@ -129,10 +150,12 @@ const PoolPage = () => {
             <WelcomePanel
               language={language}
               onClick={() => {
+                connect.send("VKWebAppGetUserInfo")
                 setActivePanel(0)
               }}
               title={translated && translated.title}
               description={translated && translated.description}
+              company={poolData.meta.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
@@ -224,4 +247,4 @@ const PoolPage = () => {
   )
 }
 
-export default PoolPage
+export default SurveyPage
