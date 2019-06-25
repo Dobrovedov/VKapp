@@ -19,6 +19,20 @@ export const getTranslation = (text, lang) =>
       `lang=${lang}`,
   )
 
+export const translate = (text, lang) => {
+  var xhr = new XMLHttpRequest()
+  xhr.open(
+    "GET",
+    `https://translate.yandex.net/api/v1.5/tr.json/translate?` +
+      `key=${token}&` +
+      `text=${text}&` +
+      `lang=${lang}`,
+    false,
+  )
+  xhr.send()
+  return xhr.status !== 200 ? "" : JSON.parse(xhr.responseText).text[0]
+}
+
 const translateTitle = (data, lang) =>
   data.meta.title !== ""
     ? getTranslation(data.meta.title, lang).then((res) => {

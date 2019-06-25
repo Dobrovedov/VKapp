@@ -2,35 +2,37 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Panel, PanelHeader, Group, List, Cell } from "@vkontakte/vkui"
 import Icon24Done from "@vkontakte/icons/dist/24/done"
+import { translate } from "../translator"
 
 const LanguagePanel = ({ language, setAnotherLanguage }) => {
+  const languages = [
+    ["ru", "Русский"],
+    ["en", "Английский"],
+    ["be", "Белорусский"],
+    ["bg", "Болгарский"],
+    ["cs", "Чешский"],
+    ["da", "Датский"],
+    ["de", "Немецкий"],
+    ["el", "Греческий"],
+    ["es", "Испанский"],
+    ["fr", "Французский"],
+    ["zh", "Китайский"],
+  ]
   return (
     <Group>
       <List>
-        <Cell
-          onClick={() => setAnotherLanguage("ru")}
-          asideContent={
-            language === "ru" ? <Icon24Done fill="var(--accent)" /> : null
-          }
-        >
-          Русский
-        </Cell>
-        <Cell
-          onClick={() => setAnotherLanguage("it")}
-          asideContent={
-            language === "it" ? <Icon24Done fill="var(--accent)" /> : null
-          }
-        >
-          Итальянский
-        </Cell>
-        <Cell
-          onClick={() => setAnotherLanguage("en")}
-          asideContent={
-            language === "en" ? <Icon24Done fill="var(--accent)" /> : null
-          }
-        >
-          Английский
-        </Cell>
+        {languages.map((country) => (
+          <Cell
+            onClick={() => setAnotherLanguage(country[0])}
+            asideContent={
+              language === country[0] ? (
+                <Icon24Done fill="var(--accent)" />
+              ) : null
+            }
+          >
+            {translate(country[1], language)}
+          </Cell>
+        ))}
       </List>
     </Group>
   )

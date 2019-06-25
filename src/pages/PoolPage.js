@@ -34,15 +34,19 @@ const PoolPage = () => {
   const [seenQuestions, setSeenQuestions] = useState([])
   const [responseId, setResponseId] = useState(null)
   const [prevPanel, setPrevPanel] = useState("Welcome")
-  const [language, setLanguage] = useState(navigator.language)
+  const [language, setLanguage] = useState(navigator.language.substr(0, 2))
+  const [rawData, setRawData] = useState({})
 
   const [isLoading, setIsLoading] = useState(true)
 
   const prevUserAnswer = usePrevious(userAnswers)
 
+  const objectCopy = (obj) => JSON.parse(JSON.stringify(obj))
+
   // Data Retrieval
   useEffect(() => {
     getSurvey(poolId).then((res) => {
+      setRawData(objectCopy(res.data))
       setPoolData(translateData(res.data, language))
       setIsLoading(false)
     })
@@ -133,7 +137,7 @@ const PoolPage = () => {
                   left={
                     <HeaderButton
                       onClick={() => {
-                        setPrevPanel(JSON.parse(JSON.stringify(activePanel)))
+                        setPrevPanel(objectCopy(activePanel))
                         setActivePanel("languages")
                       }}
                     >
@@ -158,6 +162,7 @@ const PoolPage = () => {
                       [question.id]: { type: question.type, ...value },
                     })
                   }}
+                  language={language}
                 />
                 <QuestionControls
                   onBack={() => {
@@ -190,7 +195,7 @@ const PoolPage = () => {
               language={language}
               setAnotherLanguage={(lang) => {
                 setLanguage(lang)
-                translateData(poolData, lang)
+                setPoolData(translateData(rawData, lang))
                 setActivePanel(prevPanel)
               }}
             />
