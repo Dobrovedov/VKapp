@@ -57,7 +57,6 @@ const SurveyPage = () => {
   // User Retrieval
   useEffect(() => {
     connect.subscribe((e) => {
-      console.log(e)
       if (e.detail.type === "VKWebAppGetUserInfoResult") {
         setUser(e.detail.data)
       }
@@ -155,7 +154,7 @@ const SurveyPage = () => {
               }}
               title={translated && translated.title}
               description={translated && translated.description}
-              company={poolData.meta.companyName}
+              company={poolData.meta.company.companyName}
             />
           </Panel>,
           ...poolData.questions.map((question, index) => {
