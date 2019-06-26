@@ -1,8 +1,21 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Div } from "@vkontakte/vkui"
 import PropTypes from "prop-types"
 
-const ThanksPanel = ({ confirmationMessage }) => {
+import useTranslate from "../hooks/useTranslate"
+
+const ThanksPanel = ({ confirmationMessage, language }) => {
+  const translatedTitle = useTranslate("Опрос завершён", language)
+  const translatedConfirmationMessage = useTranslate(
+    confirmationMessage,
+    language,
+  )
+
+  const imgUrl = useMemo(
+    () => `../img/sticker/${Math.floor(Math.random() * 10) + 1}.png`,
+    [confirmationMessage],
+  )
+
   return (
     <Div
       style={{
@@ -12,18 +25,19 @@ const ThanksPanel = ({ confirmationMessage }) => {
         textAlign: "center",
       }}
     >
-      <h2>Опрос завершён</h2>
+      <h2>{translatedTitle}</h2>
       <img
         className="Sticker"
-        src={"../img/sticker/" + (Math.floor(Math.random() * 10) + 1) + ".png"}
+        src={imgUrl}
         style={{
           display: "block",
           width: "50%",
           maxWidth: "240px",
           margin: "20px auto",
         }}
+        alt="Thank You"
       />
-      <p>{confirmationMessage}</p>
+      <p>{translatedConfirmationMessage || confirmationMessage}</p>
     </Div>
   )
 }

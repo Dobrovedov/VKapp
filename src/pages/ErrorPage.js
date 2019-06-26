@@ -1,8 +1,15 @@
 import React from "react"
 import { View, Panel, Div } from "@vkontakte/vkui"
-import ErrorPic from "../components/ErrorPic"
+import RandomErrorSticker from "../components/RandomErrorSticker"
 
-const ErrorPage = () => {
+import useTranslate from "../hooks/useTranslate"
+
+const ErrorPage = ({ language }) => {
+  const translatedTitle = useTranslate("404 Страница не найдена", language)
+  const translatedDescription = useTranslate(
+    "Данный опрос уже закрыт или ещё не создан",
+    language,
+  )
   return (
     <View>
       <Panel>
@@ -14,9 +21,9 @@ const ErrorPage = () => {
             textAlign: "center",
           }}
         >
-          <h2>404 Страница не найдена</h2>
-          <ErrorPic alt={"whoops"} />
-          <p>Данный опрос уже закрыт или ещё не создан</p>
+          <h2>{translatedTitle}</h2>
+          <RandomErrorSticker alt={"whoops"} />
+          <p>{translatedDescription}</p>
         </Div>
       </Panel>
     </View>

@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import { Button } from "@vkontakte/vkui"
 
-const SubmitButton = ({ onClick, disabled }) => {
+const SubmitButton = ({ onClick, disabled, text }) => {
   return (
     <Button
       size="l"
@@ -14,16 +14,18 @@ const SubmitButton = ({ onClick, disabled }) => {
         color: "white",
       }}
     >
-      Завершить
+      {text}
     </Button>
   )
 }
 
 SubmitButton.defaultProps = {
   disabled: false,
+  text: "Завершить",
 }
 
 SubmitButton.propTypes = {
+  text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 }

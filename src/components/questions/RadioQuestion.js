@@ -1,7 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Radio, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Radio, Cell, Spinner } from "@vkontakte/vkui"
+
+import useTranslation from "../../hooks/useTranslation"
 
 const RadioQuestion = ({
   id,
@@ -11,21 +13,36 @@ const RadioQuestion = ({
   value,
   onChange,
   hasAnotherOption,
+  language,
 }) => {
+  const { translated, isLoading } = useTranslation(
+    {
+      title,
+      description,
+      options,
+    },
+    language,
+  )
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <>
-      <Cell description={description} multiline>
-        {title}
+      <Cell description={translated.description || description} multiline>
+        {translated.title || title}
       </Cell>
-      {options.map((option) => (
+      {options.map((option, index) => (
         <Radio
           name={id}
-          description={option}
           checked={value.selectedAnswer === option}
           onChange={(event) => {
             onChange({ selectedAnotherOption: false, selectedAnswer: option })
           }}
-        />
+        >
+          {(translated.options && translated.options[index]) || option}
+        </Radio>
       ))}
       {hasAnotherOption && (
         <Radio

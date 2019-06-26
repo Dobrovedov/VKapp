@@ -14,14 +14,21 @@ const QuestionControls = ({
   isNextButtonDisabled,
   isLastQuestion,
   isFirstQuestion,
+  translation,
 }) => {
   return (
     <Div style={{ display: "flex" }}>
-      {!isFirstQuestion && <BackButton onClick={onBack} />}
+      {!isFirstQuestion && (
+        <BackButton onClick={onBack} text={translation.backButton} />
+      )}
       {!isLastQuestion ? (
-        <NextButton onClick={onNext} disabled={isNextButtonDisabled} />
+        <NextButton
+          onClick={onNext}
+          disabled={isNextButtonDisabled}
+          text={translation.nextButton}
+        />
       ) : (
-        <SubmitButton onClick={onSubmit} />
+        <SubmitButton onClick={onSubmit} text={translation.submitButton} />
       )}
     </Div>
   )
@@ -38,6 +45,11 @@ QuestionControls.propTypes = {
   isNextButtonDisabled: PropTypes.bool,
   isFirstQuestion: PropTypes.bool.isRequired,
   isLastQuestion: PropTypes.bool.isRequired,
+  translation: PropTypes.shape({
+    nextButton: PropTypes.string,
+    backButton: PropTypes.string,
+    submitButton: PropTypes.string,
+  }).isRequired,
 }
 
 export default QuestionControls

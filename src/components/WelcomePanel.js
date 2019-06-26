@@ -2,7 +2,13 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Div, Button } from "@vkontakte/vkui"
 
-const WelcomePanel = ({ title, company, description, onClick }) => {
+import useTranslation from "../hooks/useTranslate"
+
+const WelcomePanel = ({ title, company, description, onClick, language }) => {
+  const translatedTitle = useTranslation(title, language)
+  const translatedDescription = useTranslation(description, language)
+  const translatedButtonStart = useTranslation("Начать", language)
+
   return (
     <Div
       className="WelcomePage"
@@ -20,7 +26,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
       }}
     >
       <Div style={{ fontSize: "1.5em", marginBottom: 20 }}>
-        {title}
+        {translatedTitle || title}
         {company && <Div style={{ fontSize: "0.4em" }}>by {company}</Div>}
       </Div>
       <Div
@@ -31,7 +37,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
           overflow: "auto",
         }}
       >
-        {description}
+        {translatedDescription || description}
       </Div>
       <Div>
         <Button
@@ -44,7 +50,7 @@ const WelcomePanel = ({ title, company, description, onClick }) => {
           stretched
           onClick={onClick}
         >
-          Начать
+          {translatedButtonStart}
         </Button>
       </Div>
     </Div>
@@ -55,6 +61,7 @@ WelcomePanel.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   onClick: PropTypes.func,
+  language: PropTypes.string.isRequired,
 }
 
 export default WelcomePanel

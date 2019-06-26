@@ -1,7 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Select, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Select, Cell, Spinner } from "@vkontakte/vkui"
+
+import useTranslation from "../../hooks/useTranslation"
 
 const DropdownQuestion = ({
   id,
@@ -11,15 +13,28 @@ const DropdownQuestion = ({
   options,
   value,
   onChange,
+  language,
 }) => {
+  const { translated, isLoading } = useTranslation(
+    { title, description, options },
+    language,
+  )
+
+  // Initialize with starting value
   if (!value.selectedAnswer) {
-    onChange({ selectedAnswer: options[0] })
+    onChange({
+      selectedAnswer: options[0],
+    })
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
     <>
-      <Cell description={description} multiline>
-        {title}
+      <Cell description={translated.description || description} multiline>
+        {translated.title || title}
       </Cell>
       <Select
         id={id}
@@ -32,7 +47,11 @@ const DropdownQuestion = ({
         value={value.selectedAnswer}
       >
         {options.map((text, index) => {
-          return <option value={text}>{text}</option>
+          return (
+            <option value={text}>
+              {(translated.options && translated.options[index]) || text}
+            </option>
+          )
         })}
       </Select>
     </>

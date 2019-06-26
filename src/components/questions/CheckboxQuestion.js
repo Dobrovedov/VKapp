@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-import { Checkbox, Cell, FormLayoutGroup } from "@vkontakte/vkui"
+import { Checkbox, Cell, Spinner } from "@vkontakte/vkui"
+
+import useTranslation from "../../hooks/useTranslation"
 
 const CheckboxQuestion = ({
   id,
@@ -11,11 +13,25 @@ const CheckboxQuestion = ({
   value,
   onChange,
   hasAnotherOption,
+  language,
 }) => {
   const [chosenAnswers, setChosenAnswers] = useState(value.selectedAnswers)
   const isAnotherOptionChecked = chosenAnswers.some(
     (answer) => answer === "Другое",
   )
+
+  const { translated, isLoading } = useTranslation(
+    {
+      title,
+      description,
+      options,
+    },
+    language,
+  )
+
+  // Do not change dependency array
+  // Until reason on infinite re-render
+  // Will be discovered
   useEffect(() => {
     onChange({
       selectedAnotherOption: isAnotherOptionChecked,
@@ -23,12 +39,16 @@ const CheckboxQuestion = ({
     })
   }, [chosenAnswers])
 
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <>
-      <Cell description={description} multiline>
-        {title}
+      <Cell description={translated.description || description} multiline>
+        {translated.title || title}
       </Cell>
-      {options.map((option) => (
+      {options.map((option, index) => (
         <Checkbox
           value={option}
           defaultChecked={chosenAnswers.indexOf(option) !== -1}
@@ -42,7 +62,7 @@ const CheckboxQuestion = ({
             }
           }}
         >
-          {option}
+          {(translated.options && translated.options[index]) || option}
         </Checkbox>
       ))}
       {hasAnotherOption && (
