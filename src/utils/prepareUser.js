@@ -1,4 +1,7 @@
 import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+
+dayjs.extend(customParseFormat)
 
 const prepareUser = ({
   city,
@@ -11,7 +14,7 @@ const prepareUser = ({
   bdate,
 }) => {
   const date1 = dayjs()
-  const date2 = dayjs(bdate)
+  const date2 = dayjs(bdate, "DD.MM.YYYY")
 
   const age = date1.diff(date2, "year")
   console.log(age)
