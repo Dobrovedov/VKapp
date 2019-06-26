@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
 
 import { Cell, Input, Spinner, Textarea } from "@vkontakte/vkui"
 import "@vkontakte/vkui/dist/vkui.css"
 
+import { translate } from "../../translator"
 import useTranslation from "../../hooks/useTranslation"
 
 const TextareaQuestion = ({
@@ -20,6 +21,17 @@ const TextareaQuestion = ({
     { title, description },
     language,
   )
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      translate(value.text, "ru").then((res) =>
+        onChange({ text: value.text, translatedValue: res.data.text[0] }),
+      )
+    }, 1000)
+    return () => {
+      clearTimeout(id)
+    }
+  }, [value.text])
 
   if (isLoading) {
     return <Spinner />
