@@ -17,7 +17,6 @@ const prepareUser = ({
   const date2 = dayjs(bdate, "DD.MM.YYYY")
 
   const age = date1.diff(date2, "year")
-  console.log(age)
 
   return {
     vkId: id,
