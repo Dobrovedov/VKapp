@@ -13,10 +13,10 @@ const prepareUser = ({
   timezone,
   bdate,
 }) => {
-  const date1 = dayjs()
-  const date2 = dayjs(bdate, "DD.MM.YYYY")
+  const today = dayjs()
+  const birthdate = dayjs(bdate, "DD.MM.YYYY")
 
-  const age = date1.diff(date2, "year")
+  const age = today.diff(birthdate, "year")
 
   return {
     vkId: id,
