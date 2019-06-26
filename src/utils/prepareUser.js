@@ -11,10 +11,11 @@ const prepareUser = ({
   vkId: id,
   firstName: first_name,
   lastName: last_name,
-  city: city ? city.title : null,
-  country: country ? country.title : null,
+  city: city && city.title,
+  country: country && country.title,
   gender: sex,
   timezone: timezone,
+  bdate,
 })
 
 export default prepareUser

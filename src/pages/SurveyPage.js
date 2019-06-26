@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 
 import {
   View,
@@ -10,6 +10,7 @@ import {
   Spinner,
   HeaderButton,
 } from "@vkontakte/vkui"
+
 import Icon24Globe from "@vkontakte/icons/dist/24/globe"
 
 import ErrorPage from "./ErrorPage"
@@ -51,7 +52,12 @@ const SurveyPage = () => {
 
   const prevUserAnswer = usePrevious(userAnswers)
 
-  const [user, setUser] = useState()
+  const [user, setUser] = useState({})
+  const preparedUser = useMemo(() => prepareUser(user), [user])
+  const preparedAnswers = useMemo(
+    () => prepareResponse(surveyData.id, userAnswers),
+    [surveyData.id, userAnswers],
+  )
 
   // User Retrieval
   useEffect(() => {
@@ -87,22 +93,14 @@ const SurveyPage = () => {
     // Generate new response
     // If no was provided before
     if (!responseId) {
-      sendAnswers(
-        surveyId,
-        prepareResponse(surveyId, userAnswers),
-        prepareUser(user),
-      ).then((response) => {
+      sendAnswers(surveyId, preparedAnswers, preparedUser).then((response) => {
         setResponseId(response.data.id)
       })
       return
     }
 
     // Update response with new values
-    sendChangedAnswers(
-      surveyId,
-      responseId,
-      prepareResponse(surveyData.id, userAnswers),
-    )
+    sendChangedAnswers(surveyId, responseId, preparedAnswers, preparedUser)
   }
 
   const sendRequestByBack = (question) => {
@@ -116,11 +114,7 @@ const SurveyPage = () => {
     }
 
     // Update response with new values
-    sendChangedAnswers(
-      surveyId,
-      responseId,
-      prepareResponse(surveyData.id, userAnswers),
-    )
+    sendChangedAnswers(surveyId, responseId, preparedAnswers, preparedUser)
   }
 
   if (isLoading) {
