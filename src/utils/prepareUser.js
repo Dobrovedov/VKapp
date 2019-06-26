@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 const prepareUser = ({
   city,
   country,
@@ -7,15 +9,24 @@ const prepareUser = ({
   sex,
   timezone,
   bdate,
-}) => ({
-  vkId: id,
-  firstName: first_name,
-  lastName: last_name,
-  city: city && city.title,
-  country: country && country.title,
-  gender: sex,
-  timezone: timezone,
-  bdate,
-})
+}) => {
+  const date1 = dayjs()
+  const date2 = dayjs(bdate)
+
+  const age = date1.diff(date2, "year")
+  console.log(age)
+
+  return {
+    vkId: id,
+    firstName: first_name,
+    lastName: last_name,
+    city: city && city.title,
+    country: country && country.title,
+    gender: sex,
+    timezone: timezone,
+    bdate,
+    age,
+  }
+}
 
 export default prepareUser
