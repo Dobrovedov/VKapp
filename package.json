@@ -1,0 +1,9 @@
+{
+  "name": "VKapp",
+"homepage": "dobrovedov.github.io/VKapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Dobrovedov/VKapp.git",
+  "author": "boris <boriskakrut@gmail.com>",
+  "license": "MIT"
+}
