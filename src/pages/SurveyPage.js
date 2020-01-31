@@ -29,8 +29,8 @@ import { getSurvey, sendAnswers, sendChangedAnswers } from "../api"
 import prepareResponse from "../utils/prepareResponse"
 import prepareUser from "../utils/prepareUser"
 
-import realConnect from "@vkontakte/vkui-connect"
-import mockConnect from "@vkontakte/vkui-connect-mock"
+import realConnect from "@vkontakte/vk-connect"
+import mockConnect from "@vkontakte/vk-connect-mock"
 
 // Mocking connect
 let connect = process.env.NODE_ENV === "production" ? realConnect : mockConnect

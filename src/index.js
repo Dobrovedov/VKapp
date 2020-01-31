@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import connect from "@vkontakte/vkui-connect"
+import connect from "@vkontakte/vk-connect"
 import App from "./App"
 
 import "@vkontakte/vkui/dist/vkui.css"
